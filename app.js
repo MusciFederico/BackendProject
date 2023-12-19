@@ -1,83 +1,88 @@
-class ProductManager {
-    constructor() {
-        this.products = [];
-        this.productIdCounter = 1;
+const fs = require('fs').promises;
+
+class DataManager {
+    constructor(filePath) {
+        this.filePath = filePath;
+        this.data = { products: [], users: [], productIdCounter: 1, userIdCounter: 1 };
+        this.loadFromFile(); // Cargar datos al inicializar la instancia
     }
 
-    create(data) {
-        const { title, photo, price, stock } = data;
-        const newProduct = {
-            id: this.productIdCounter++,
-            title,
-            photo,
-            price,
-            stock,
-        };
-        this.products.push(newProduct);
+    async loadFromFile() {
+        try {
+            const data = await fs.readFile(this.filePath, 'utf8');
+            if (data) {
+                this.data = JSON.parse(data);
+            }
+        } catch (error) {
+            // Si el archivo no existe o hay un error al leerlo, se maneja aquí
+            console.error('Error al cargar el archivo:', error);
+        }
+    }
+
+    async saveToFile() {
+        try {
+            await fs.writeFile(this.filePath, JSON.stringify(this.data, null, 2));
+            console.log('Datos guardados correctamente en el archivo.');
+        } catch (error) {
+            console.error('Error al guardar en el archivo:', error);
+        }
+    }
+
+    async createProduct(data) {
+        const newProduct = { id: this.data.productIdCounter++, ...data };
+        this.data.products.push(newProduct);
+        await this.saveToFile(); // Guardar datos después de agregar un nuevo producto
         return newProduct;
     }
 
-    read() {
-        return this.products;
-    }
-
-    readOne(id) {
-        return this.products.find((product) => product.id === id);
-    }
-}
-
-class UserManager {
-    constructor() {
-        this.users = [];
-        this.userIdCounter = 1;
-    }
-
-    create(data) {
-        const { name, photo, email } = data;
-        const newUser = {
-            id: this.userIdCounter++,
-            name,
-            photo,
-            email,
-        };
-        this.users.push(newUser);
+    async createUser(data) {
+        const newUser = { id: this.data.userIdCounter++, ...data };
+        this.data.users.push(newUser);
+        await this.saveToFile(); // Guardar datos después de agregar un nuevo usuario
         return newUser;
     }
 
-    read() {
-        return this.users;
+    getAllProducts() {
+        return this.data.products;
     }
 
-    readOne(id) {
-        return this.users.find((user) => user.id === id);
+    getProductById(id) {
+        return this.data.products.find(product => product.id === id);
+    }
+
+    getAllUsers() {
+        return this.data.users;
+    }
+
+    getUserById(id) {
+        return this.data.users.find(user => user.id === id);
     }
 }
 
 // Ejemplo de uso
-const productManager = new ProductManager();
-const userManager = new UserManager();
+const dataManager = new DataManager('data.json');
 
 // Crear productos y usuarios
-productManager.create({
-    title: "Producto 1",
-    photo: "ruta/imagen1.jpg",
+dataManager.createProduct({
+    title: 'Producto 1',
+    photo: 'ruta/imagen1.jpg',
     price: 20.99,
     stock: 50,
 });
 
-userManager.create({
-    name: "Usuario 1",
-    photo: "ruta/imagen_user1.jpg",
-    email: "usuario1@example.com",
+dataManager.createUser({
+    name: 'Usuario 1',
+    photo: 'ruta/imagen_user1.jpg',
+    email: 'usuario1@example.com',
 });
 
 // Obtener todos los productos y usuarios
-const allProducts = productManager.read();
-const allUsers = userManager.read();
+const allProducts = dataManager.getAllProducts();
+const allUsers = dataManager.getAllUsers();
 
 // Obtener un producto y un usuario por su ID
-const productById = productManager.readOne(1);
-const userById = userManager.readOne(1);
+const productById = dataManager.getProductById(1);
+const userById = dataManager.getUserById(1);
 
 console.log(allProducts);
 console.log(allUsers);

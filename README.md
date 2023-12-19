@@ -16,6 +16,8 @@ Este proyecto implementa dos clases en JavaScript, `ProductManager` y `UserManag
 - `read()`: Devuelve un arreglo con todos los usuarios existentes.
 - `readOne(id)`: Devuelve un usuario buscado por su ID.
 
+## Ahora con archivo .json y promises
+
 ## Desarrollador
 
 - **Federico Musci**

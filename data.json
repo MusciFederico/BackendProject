@@ -1,0 +1,21 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Producto 1",
+      "photo": "ruta/imagen1.jpg",
+      "price": 20.99,
+      "stock": 50
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Usuario 1",
+      "photo": "ruta/imagen_user1.jpg",
+      "email": "usuario1@example.com"
+    }
+  ],
+  "productIdCounter": 2,
+  "userIdCounter": 2
+}
