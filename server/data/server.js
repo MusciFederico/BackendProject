@@ -30,9 +30,16 @@ app.get('/api/users', (req, res) => {
 });
 
 app.post('/api/users', (req, res) => {
-    const newUser = req.body;
-    const createdUser = usersManager.create(newUser);
-    res.status(201).json(createdUser);
+    try {
+        const newUser = req.body;
+        const createdUser = usersManager.create(newUser);
+        res.status(201).json(createdUser);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error creating user."
+        });
+    }
 });
 
 // Ruta para obtener un usuario por ID
@@ -69,9 +76,16 @@ app.get('/api/products', (req, res) => {
 });
 
 app.post('/api/products', (req, res) => {
-    const newProduct = req.body;
-    const createdProduct = productsManager.create(newProduct);
-    res.status(201).json(createdProduct);
+    try {
+        const newProduct = req.body;
+        const createdProduct = productsManager.create(newProduct);
+        res.status(201).json(createdProduct);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error creating product."
+        });
+    }
 });
 
 app.get('/api/products/:pid', (req, res) => {
