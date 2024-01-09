@@ -41,7 +41,8 @@ class UsersFs {
     }
 
     readOne(id) {
-        return this.data.users.find(user => user.id === id);
+        const stringId = String(id); // Convertir el ID proporcionado a string
+        return this.data.users.find(user => String(user.id) === stringId);
     }
 
     destroy(id) {
@@ -49,6 +50,16 @@ class UsersFs {
         if (index !== -1) {
             this.data.users.splice(index, 1);
             return this.saveToFile(); // Guardar los cambios al eliminar un usuario
+        }
+        return false; // Indica que no se encontró el usuario con el ID dado
+    }
+
+    update(id, data) {
+        const index = this.data.users.findIndex(user => user.id === id);
+        if (index !== -1) {
+            this.data.users[index] = { ...this.data.users[index], ...data };
+            this.saveToFile(); // Guardar los cambios al actualizar un usuario
+            return this.data.users[index];
         }
         return false; // Indica que no se encontró el usuario con el ID dado
     }

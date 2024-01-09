@@ -41,7 +41,8 @@ class ProductsFs {
     }
 
     readOne(id) {
-        return this.data.products.find(product => product.id === id);
+        const stringId = String(id); // Convertir el ID proporcionado a string
+        return this.data.products.find(product => String(product.id) === stringId);
     }
 
     destroy(id) {
@@ -53,8 +54,14 @@ class ProductsFs {
         return false; // Indica que no se encontró el producto con el ID dado
     }
 
-    isEmpty() {
-        return this.data.products.length === 0;
+    update(id, data) {
+        const index = this.data.products.findIndex(product => product.id === id);
+        if (index !== -1) {
+            this.data.products[index] = { ...this.data.products[index], ...data };
+            this.saveToFile(); // Guardar los cambios al actualizar un producto
+            return this.data.products[index];
+        }
+        return false; // Indica que no se encontró el producto con el ID dado
     }
 }
 
