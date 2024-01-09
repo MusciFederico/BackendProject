@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Usuario 1",
+      "photo": "ruta/imagen_user1.jpg",
+      "email": "usuario1@example.com"
+    }
+  ],
+  "userIdCounter": 2
+}
