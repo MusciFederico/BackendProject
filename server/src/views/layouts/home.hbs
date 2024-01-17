@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+
+<body>
+
+    <h1>{{ title }}</h1>
+
+    <!-- Add your logo here -->
+    <img src="/path/to/your/logo.png" alt="Logo">
+
+    {{#if products.length}}
+    <ul>
+        {{#each products}}
+        <li>
+            <h3>{{ this.title }}</h3>
+            <img src="{{ this.photo }}" alt="{{ this.title }} Image">
+            <p>Price: ${{ this.price }}</p>
+            <p>Stock: {{ this.stock }}</p>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>No products available.</p>
+    {{/if}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Additional Socket.IO logic for the home page can be added here if needed
+    </script>
+
+</body>
+
+</html>
