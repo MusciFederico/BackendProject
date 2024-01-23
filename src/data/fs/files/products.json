@@ -1,0 +1,42 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Producto 1",
+      "photo": "https://mexx-img-2019.s3.amazonaws.com/Celular-Samsung-Galaxy-A14-128Mb-Verde_45840_1.jpeg",
+      "price": 20.99,
+      "stock": 50
+    },
+    {
+      "id": "a384fc51066e",
+      "title": "xzc",
+      "price": 11,
+      "stock": 22
+    },
+    {
+      "id": "245389b9c13a",
+      "title": "auto",
+      "price": 999,
+      "stock": 3
+    },
+    {
+      "id": "3ec04d91099e",
+      "title": "pc",
+      "price": 800,
+      "stock": 50
+    },
+    {
+      "id": "1fd4a2da0a79",
+      "title": "Vaso",
+      "price": 5,
+      "stock": 999
+    },
+    {
+      "id": "5e12cabbed04",
+      "title": "Vaso de oro",
+      "price": 50,
+      "stock": 999
+    }
+  ],
+  "productIdCounter": 2
+}

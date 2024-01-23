@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+
+<body>
+
+    <h1>{{ title }}</h1>
+
+    <ul id="products-list">
+        {{#each products}}
+        <li>{{ this.title }} - Price: ${{ this.price }}</li>
+        {{/each}}
+    </ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const socket = io();
+
+            // Receive products from the server
+            socket.on('products', (products) => {
+                updateProductList(products);
+            });
+
+            // Update the product list on the page
+            function updateProductList(products) {
+                const productList = document.getElementById('products-list');
+                productList.innerHTML = '';
+
+                products.forEach((product) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${product.title} - $${product.price.toFixed(2)}`;
+                    productList.appendChild(listItem);
+                });
+            }
+
+            // Request initial products from the server
+            socket.emit('getProducts');
+        });
+    </script>
+
+</body>
+
+</html>
