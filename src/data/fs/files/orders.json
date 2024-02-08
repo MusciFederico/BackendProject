@@ -1,0 +1,22 @@
+{
+  "orders": [
+    {
+      "oid": 1,
+      "userId": 1,
+      "productIds": [1, 2],
+      "status": "pending"
+    },
+    {
+      "oid": 2,
+      "userId": 2,
+      "productIds": [3],
+      "status": "completed"
+    },
+    {
+      "oid": 3,
+      "userId": 3,
+      "productIds": [1, 3],
+      "status": "pending"
+    }
+  ]
+}
