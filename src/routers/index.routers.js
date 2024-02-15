@@ -1,29 +1,31 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-// Importar los enrutadores
-const apiUsersRouter = require('./api/users.router');
-const apiProductsRouter = require('./api/products.router');
-const apiOrdersRouter = require('./api/orders.router');
-const eventsRouter = require('./api/events.router');
+import apiUsersRouter from './api/users.router.js';
+import apiProductsRouter from './api/products.router.js';
+import apiOrdersRouter from './api/orders.router.js';
+import sessionRouter from './api/session.router.js';
+import eventsRouter from './api/events.router.js';
 
-// Montar las rutas de API
 router.use('/api/users', apiUsersRouter);
 router.use('/api/products', apiProductsRouter);
 router.use('/api/orders', apiOrdersRouter);
+router.use("/sessions", sessionRouter);
 
-// Montar las rutas de eventos
 router.use('/events', eventsRouter);
 
-// Importar y montar las rutas de vistas
-const viewsHomeRouter = require('./views/home.router');
-const viewsRealTimeProductsRouter = require('./views/real-time-products.router');
-const viewsProductFormRouter = require('./views/product-form.router');
-const viewsRegistrationRouter = require('./views/registration.router');
+import viewsHomeRouter from './views/home.router.js';
+import viewsRealTimeProductsRouter from './views/real-time-products.router.js';
+import viewsProductFormRouter from './views/product-form.router.js';
+import viewsRegistrationRouter from './views/registration.router.js';
+import viewsLoginRouter from './views/login.router.js';
+
 
 router.use('/', viewsHomeRouter);
 router.use('/real', viewsRealTimeProductsRouter);
-router.use('/form', viewsProductFormRouter);
-router.use('/register', viewsRegistrationRouter);
+router.use('/products/form', viewsProductFormRouter);
+router.use('/auth/register', viewsRegistrationRouter);
+router.use('/auth/login', viewsLoginRouter); 
 
-module.exports = router;
+export default router;
+

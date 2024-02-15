@@ -1,16 +1,22 @@
-const express = require('express');
+import express from 'express';
+import path from 'path';
+import isAdminMid from '../../middlewares/isAdmin.mid.js';
+
+// import ProductsFs from '../../data/fs/products.fs.js';
+// const productsManager = new ProductsFs('./src/data/fs/files/products.json');
+
+import { productsManager } from '../../data/mongo/manager.mongo.js';
+
 const router = express.Router();
-const path = require('path');
-
-const ProductsFs = require('../../data/fs/products.fs');
-const productsManager = new ProductsFs(path.join(__dirname, '..', '..', 'data', 'fs', 'files', 'products.json'));
-
-// const { productsManager } = require('../../data/mongo/manager.mongo');
 
 router.get('/', async (req, res, next) => {
     try {
-        const allProducts = await productsManager.read();
-        if (allProducts.length > 0) {
+        const { filter, sort } = req.query;
+        const filterObj = filter ? JSON.parse(filter) : {};
+        const sortObj = sort ? JSON.parse(sort) : {};
+        const allProducts = await productsManager.read({ filter: filterObj, sort: sortObj });
+
+        if (allProducts && allProducts.length > 0) {
             res.json({
                 statusCode: 200,
                 response: allProducts
@@ -25,47 +31,36 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', isAdminMid, async (req, res, next) => {
     try {
-        // Obtener datos del nuevo producto desde el cuerpo de la solicitud
-        const { title, price, stock } = req.body;
-
-        // Convertir el precio y el stock a valores numéricos
+        const { name, price, stock, img, place } = req.body;
         const numericPrice = parseFloat(price);
         const numericStock = parseInt(stock);
 
-        // Verificar si la conversión fue exitosa
         if (isNaN(numericPrice) || isNaN(numericStock)) {
-            // Si la conversión falla, devolver un error
             const conversionError = new Error('Invalid price or stock format');
-            conversionError.statusCode = 400; // Bad Request
+            conversionError.statusCode = 400;
             throw conversionError;
         }
 
-        // Crear el nuevo objeto de producto con los valores numéricos
         const newProduct = {
-            title,
+            name,
+            img,
+            place,
             price: numericPrice,
             stock: numericStock,
         };
 
-        // Crear el producto en el sistema de archivos
         const createdProduct = await productsManager.create(newProduct);
 
-        // Responder con el producto creado
         res.status(201).json({
             statusCode: 201,
             response: createdProduct
         });
-
-        // Emitir el nuevo producto para actualizar la vista en tiempo real
-        // No se emiten eventos aquí porque este router no tiene acceso a io
     } catch (error) {
-        // Manejar errores y pasarlos al siguiente middleware
         next(error);
     }
 });
-
 
 router.get('/:pid', async (req, res, next) => {
     const productId = req.params.pid;
@@ -124,4 +119,4 @@ router.delete('/:pid', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;

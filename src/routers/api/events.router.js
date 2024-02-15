@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const socketio = require('socket.io');
+import express from 'express';
+import { Server as socketio } from 'socket.io'; // Importa Server de socket.io
+
 
 const eventsRouter = (server) => {
+    const router = express.Router(); // si se quiere usa en otros lados 
     const io = socketio(server);
 
     io.on('connection', (socket) => {
@@ -16,4 +17,4 @@ const eventsRouter = (server) => {
     return router;
 };
 
-module.exports = eventsRouter;
+export default eventsRouter;

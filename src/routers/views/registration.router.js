@@ -1,9 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-
-// Route to serve the registration page
 router.get('/', (req, res) => {
     res.render('registration', { title: 'Registration Form' });
 });
 
-module.exports = router;
+export default router;
