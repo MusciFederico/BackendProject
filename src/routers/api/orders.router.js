@@ -1,12 +1,16 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const path = require('path');
-const OrderFs = require('../../data/fs/orders.fs');
-const ordersManager = new OrderFs(path.join(__dirname, '..', '..', 'data', 'fs', 'files', 'orders.json'));
+import path from 'path';
+
+// import OrderFs from '../../data/fs/orders.fs.js';
+// const ordersManager = new OrderFs('./src/data/fs/files/orders.json');
+
+import { ordersManager } from '../../data/mongo/manager.mongo.js';
 
 router.get('/', async (req, res, next) => {
     try {
-        const allOrders = await ordersManager.read();
+        const { filter, sort } = req.query;
+        const allOrders = await ordersManager.read({ filter, sort });
         if (allOrders.length > 0) {
             res.json({
                 statusCode: 200,
@@ -22,7 +26,6 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-// Crear una nueva orden
 router.post('/', async (req, res, next) => {
     try {
         const newOrder = req.body;
@@ -36,7 +39,6 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-// Obtener una orden por su ID
 router.get('/:oid', async (req, res, next) => {
     const orderId = req.params.oid;
     try {
@@ -56,4 +58,56 @@ router.get('/:oid', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+router.put('/:oid', async (req, res, next) => {
+    const orderId = req.params.oid;
+    try {
+        const updatedOrder = await ordersManager.update(orderId, req.body);
+        if (updatedOrder) {
+            res.json({
+                statusCode: 200,
+                response: updatedOrder
+            });
+        } else {
+            const notFoundError = new Error("Order not found");
+            notFoundError.statusCode = 404;
+            next(notFoundError);
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.delete('/:oid', async (req, res, next) => {
+    const orderId = req.params.oid;
+    try {
+        const deletedOrder = await ordersManager.destroy(orderId);
+        if (deletedOrder) {
+            res.json({
+                statusCode: 200,
+                response: deletedOrder
+            });
+        } else {
+            const notFoundError = new Error("Order not found");
+            notFoundError.statusCode = 404;
+            next(notFoundError);
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/total/:uid', async (req, res, next) => {
+    const userId = req.params.uid;
+    try {
+        const totalCost = await ordersManager.report(userId);
+        res.json({
+            statusCode: 200,
+            response: { totalCost }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+export default router;
+

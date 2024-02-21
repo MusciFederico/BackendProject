@@ -1,9 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
-// Route to serve the product form
 router.get('/', (req, res) => {
-    res.render('product-form', { title: 'Product Form' });
+    res.render('product-form', { name: 'Product Form' });
 });
 
-module.exports = router;
+export default router;

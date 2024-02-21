@@ -11,24 +11,21 @@
 
     <h1>{{ name }}</h1>
 
-    <form action="/api/users" method="post">
+    <form action="/login" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
 
-        <button type="submit">Register</button>
+        <button type="submit">Login</button>
     </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
     <script>
         const socket = io();
 
-        // Additional Socket.IO logic for registration can be added here if needed
+        // Additional Socket.IO logic for login can be added here if needed
     </script>
 
 </body>

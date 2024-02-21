@@ -1,5 +1,5 @@
-const fs = require('fs').promises;
-const crypto = require('crypto');
+import { promises } from 'fs';
+import crypto from 'crypto';
 
 class UsersFs {
     constructor(filePath) {
@@ -10,7 +10,7 @@ class UsersFs {
 
     async loadFromFile() {
         try {
-            const fileContent = await fs.readFile(this.filePath, 'utf8');
+            const fileContent = await promises.readFile(this.filePath, 'utf8');
             if (fileContent.trim() !== '') {
                 this.data = JSON.parse(fileContent);
                 console.log('Datos de usuarios cargados exitosamente:', this.data);
@@ -58,4 +58,4 @@ class UsersFs {
     }
 }
 
-module.exports = UsersFs;
+export default UsersFs;
