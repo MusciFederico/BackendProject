@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 class OrdersMemory {
     constructor(filePath) {
@@ -72,4 +72,4 @@ class OrdersMemory {
     }
 }
 
-module.exports = OrdersMemory;
+export default OrdersMemory;

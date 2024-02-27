@@ -36,6 +36,18 @@
       "title": "Vaso de oro",
       "price": 50,
       "stock": 999
+    },
+    {
+      "id": "225b807eac24",
+      "title": "prueba123",
+      "price": 999,
+      "stock": 55
+    },
+    {
+      "id": "52888cf5c2df",
+      "title": "edcfzfcas",
+      "price": 2131,
+      "stock": 1111
     }
   ],
   "productIdCounter": 2

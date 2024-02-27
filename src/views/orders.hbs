@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+    <style>
+        /* Estilos para el navbar */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            {{#if role0}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/orders">Orders</a></li>
+            {{/if}}
+            {{#if role1}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            {{/if}}
+            {{#if roleUnd}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            <li><a href="/auth/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+
+    <h1>{{ name }}</h1>
+
+    <!-- Add your logo here -->
+    {{!-- <img src="/path/to/your/logo.png" alt="Logo"> --}}
+
+    {{#if orders.length}}
+    <ul>
+        {{#each orders}}
+        <li>
+            <h3>{{ this.product_id.name }}</h3>
+            <img src="{{ this.product_id.img }}" alt="{{ this.product_id.name }} Image">
+            <p>Price: ${{ this.product_id.price }}</p>
+            <p>Stock: {{ this.product_id.stock }}</p>
+            <p>Status: {{ this.state }}</p>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>No orders found.</p>
+    {{/if}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Additional Socket.IO logic for the home page can be added here if needed
+    </script>
+
+</body>
+
+</html>
