@@ -13,9 +13,9 @@ class UsersFs {
             const fileContent = await promises.readFile(this.filePath, 'utf8');
             if (fileContent.trim() !== '') {
                 this.data = JSON.parse(fileContent);
-                console.log('Datos de usuarios cargados exitosamente:', this.data);
+                // console.log('Datos de usuarios cargados exitosamente:', this.data);
             } else {
-                console.log('El archivo de usuarios está vacío.');
+                // console.log('El archivo de usuarios está vacío.');
             }
         } catch (error) {
             console.error('Error al cargar el archivo:', error);

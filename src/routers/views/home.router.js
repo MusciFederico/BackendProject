@@ -1,26 +1,3 @@
-// import express from 'express';
-// import path from 'path';
-
-// // import ProductsFs from '../../data/fs/products.fs.js';
-// // const productsManager = new ProductsFs('./src/data/fs/files/products.json');
-
-// import { productsManager } from '../../data/mongo/manager.mongo.js';
-
-// const router = express.Router();
-
-// // Ruta para servir la página de inicio
-// router.get('/', async (req, res, next) => {
-//     try {
-//         const allProducts = await productsManager.read();
-//         console.log("estos son los productos", allProducts);
-//         res.render('home', { name: 'Commerce Home', products: allProducts });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
-// export default router;
-
 import express from 'express';
 import path from 'path';
 import { productsManager } from '../../data/mongo/manager.mongo.js';
@@ -36,9 +13,15 @@ router.get('/', async (req, res, next) => {
 
     try {
         let role;
-        if (req.session.role === 0) {
+        if (req.cookies.token) {
+            const token = req.cookies.token;
+            const data = verifytoken(token);
+            role = data.role
+        }
+
+        if (role === 0) {
             role = role0;
-        } else if (req.session.role === 1) {
+        } else if (role === 1) {
             role = role1;
         } else {
             role = roleUnd;

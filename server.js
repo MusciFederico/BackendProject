@@ -1,6 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+import env from "./src/utils/env.js"
 import express from 'express';
 import { engine } from 'express-handlebars';
 import hbs from 'hbs';
@@ -9,18 +7,18 @@ import { Server as socketIo } from 'socket.io'; // Cambio aquí
 import morgan from 'morgan';
 import path from 'path';
 import bodyParser from 'body-parser';
-import dbConnection from './src/utils/db.js';
 import expressSession from 'express-session';
 import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import sessionFileStore from 'session-file-store';
 
-
+import dbConnection from './src/utils/db.js';
+import args from "./src/utils/args.js";
 import UsersFs from './src/data/fs/users.fs.js';
 import ProductsFs from './src/data/fs/products.fs.js';
 import OrdersFs from './src/data/fs/orders.fs.js';
 import errorHandler from './src/middlewares/errorHandler.mid.js';
-import mainRouter from './src/routers/index.routers.js';
+import IndexRouter from './src/routers/index.routers.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -34,8 +32,8 @@ const usersManager = new UsersFs('./src/data/fs/files/users.json');
 const productsManager = new ProductsFs('./src/data/fs/files/products.json');
 const ordersManager = new OrdersFs('./src/data/fs/files/orders.json');
 
-
-console.log(productsManager);
+console.log(args);
+// console.log(productsManager);
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -49,10 +47,10 @@ app.use('/views', express.static('./views'));
 
 const FileStore = sessionFileStore(expressSession);
 
-app.use(cookieParser(process.env.SECRET_KEY));
+app.use(cookieParser(env.SECRET_KEY));
 
 // app.use(expressSession({
-//     secret: process.env.SECRET_KEY,
+//     secret: env.SECRET_KEY,
 //     resave: true,
 //     saveUninitialized: true,
 //     cookie: { maxAge: 60000 },
@@ -60,7 +58,7 @@ app.use(cookieParser(process.env.SECRET_KEY));
 
 // server.use(// probablemente app.use
 //     expressSession({
-//         secret: process.env.SECRET_KEY,
+//         secret: env.SECRET_KEY,
 //         resave:
 //             true,
 //         saveUninitialized: true,
@@ -73,20 +71,19 @@ app.use(cookieParser(process.env.SECRET_KEY));
 //             }),
 //     })
 // );
-
 app.use(expressSession({
-    secret: process.env.SECRET_KEY,
+    secret: env.SECRET_KEY,
     resave: true,
     saveUninitialized: true,
     store: MongoStore.create({
-        mongoUrl: process.env.DB_LINK,
+        mongoUrl: env.DB_LINK,
         ttl: 7 * 24 * 60 * 60 // 7 days
     })
 }));
 
 // store: new MongoStore({
 //     ttl: 10,
-//     mongoUrl: process.env.DB_LINK
+//     mongoUrl: env.DB_LINK
 //     })
 //     }))
 
@@ -94,7 +91,8 @@ app.use(bodyParser.json());
 
 app.use(errorHandler);
 
-app.use(mainRouter);
+const router = new IndexRouter();
+app.use(router.getRouter());
 
 // Socket.io events
 io.on('connection', (socket) => {
@@ -138,7 +136,7 @@ async function sendProductsToClient(socket) {
     }
 }
 
-const PORT = process.env.PORT || 8080;
+const PORT = env.PORT || 8080;
 server.listen(PORT, () => {
     console.log(`Servidor Express escuchando en el puerto ${PORT}`);
     dbConnection();

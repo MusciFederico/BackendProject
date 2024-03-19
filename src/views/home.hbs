@@ -38,10 +38,12 @@
             {{#if role0}}
             <li><a href="/">Home</a></li>
             <li><a href="/orders">Orders</a></li>
+            <li><button id="signout" type="submit">Sign out</button></li>
             {{/if}}
             {{#if role1}}
             <li><a href="/">Home</a></li>
             <li><a href="/products/form">Form</a></li>
+            <li><button id="signout">Sign out</button></li>
             {{/if}}
             {{#if roleUnd}}
             <li><a href="/">Home</a></li>
@@ -89,6 +91,8 @@
         // Additional Socket.IO logic for the home page can be added here if needed
     </script>
     <script src="/scripts/sortAndFilter.js"></script>
+    <script src="/scripts/signout.js"></script>
+
 
 
 </body>

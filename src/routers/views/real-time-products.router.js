@@ -20,9 +20,15 @@ router.get('/', async (req, res, next) => {
 
     try {
         let role;
-        if (req.session.role === 0) {
+        if (req.cookies.token) {
+            const token = req.cookies
+            const data = verifytoken(token);
+            role = data.role
+        }
+
+        if (role === 0) {
             role = role0;
-        } else if (req.session.role === 1) {
+        } else if (role === 1) {
             role = role1;
         } else {
             role = roleUnd;

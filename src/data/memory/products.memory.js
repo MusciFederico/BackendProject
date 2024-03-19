@@ -10,18 +10,18 @@ class ProductsMemory {
     async loadFromFile() {
         try {
             // Simulación de carga desde memoria, no se usa archivo para ProductsMemory
-            console.log('Carga de datos de productos en memoria.');
+            // console.log('Carga de datos de productos en memoria.');
         } catch (error) {
-            console.error('Error al cargar los datos:', error);
+            // console.error('Error al cargar los datos:', error);
         }
     }
 
     async saveToFile() {
         try {
             // Simulación de guardado en memoria, no se usa archivo para ProductsMemory
-            console.log('Datos de productos guardados en memoria.');
+            // console.log('Datos de productos guardados en memoria.');
         } catch (error) {
-            console.error('Error al guardar los datos:', error);
+            // console.error('Error al guardar los datos:', error);
         }
     }
 

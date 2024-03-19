@@ -13,20 +13,8 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
     try {
-        let role = undefined;
-
-        if (req.headers.token) {
-            const data = verifytoken(req.headers);
-            role = data.role;
-        }
-
         res.render('registration', {
             title: 'Registration Form',
-            session: {
-                user: {
-                    role: role
-                }
-            }
         });
     } catch (error) {
         next(error);

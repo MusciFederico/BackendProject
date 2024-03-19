@@ -13,7 +13,7 @@ class OrdersFs {
             const data = await promises.readFile(this.filePath, 'utf8');
             if (data) {
                 this.data = JSON.parse(data);
-                console.log('Datos de órdenes cargados exitosamente:', this.data);
+                // console.log('Datos de órdenes cargados exitosamente:', this.data);
             }
         } catch (error) {
             console.error('Error al cargar el archivo:', error);
@@ -23,7 +23,7 @@ class OrdersFs {
     async saveToFile() {
         try {
             await promises.writeFile(this.filePath, JSON.stringify(this.data, null, 2));
-            console.log('Datos de órdenes guardados correctamente en el archivo.');
+            // console.log('Datos de órdenes guardados correctamente en el archivo.');
         } catch (error) {
             console.error('Error al guardar en el archivo:', error);
         }

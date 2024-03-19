@@ -2,8 +2,7 @@ import { verifytoken } from "../utils/token.js";
 
 export default (req, res, next) => {
     try {
-        const data = verifytoken(req.headers);
-        const { role } = data;
+        const { role } = req.user;
         if (role === 1) {
             return next();
         } else {

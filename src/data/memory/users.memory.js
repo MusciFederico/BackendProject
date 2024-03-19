@@ -10,18 +10,18 @@ class UsersMemory {
     async loadFromFile() {
         try {
             // Simulación de carga desde memoria, no se usa archivo para UsersMemory
-            console.log('Carga de datos de usuarios en memoria.');
+            // console.log('Carga de datos de usuarios en memoria.');
         } catch (error) {
-            console.error('Error al cargar los datos:', error);
+            // console.error('Error al cargar los datos:', error);
         }
     }
 
     async saveToFile() {
         try {
             // Simulación de guardado en memoria, no se usa archivo para UsersMemory
-            console.log('Datos de usuarios guardados en memoria.');
+            // console.log('Datos de usuarios guardados en memoria.');
         } catch (error) {
-            console.error('Error al guardar los datos:', error);
+            // console.error('Error al guardar los datos:', error);
         }
     }
 
