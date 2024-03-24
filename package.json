@@ -1,10 +1,39 @@
 {
+  "name": "backendproject-master",
+  "version": "1.0.0",
+  "description": "[![NPM Version][npm-version-image]][npm-url] [![NPM Downloads][npm-downloads-image]][npm-url] [![Linux Build][github-actions-ci-image]][github-actions-ci-url] [![Windows Build][appveyor-image]][appveyor-url] [![Test Coverage][coveralls-image]][coveralls-url]",
+  "main": "server.js",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "commander": "^12.0.0",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "express-handlebars": "^7.1.2",
+    "express-session": "^1.18.0",
     "hbs": "^4.2.0",
     "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.1",
     "morgan": "^1.10.0",
+    "nodemon": "^3.0.3",
+    "passport": "^0.7.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "session": "^0.1.0",
+    "session-file-store": "^1.5.0",
     "socket.io": "^4.7.4"
-  }
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js --env dev",
+    "test": "nodemon server.js --env test"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

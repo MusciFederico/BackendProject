@@ -1,23 +1,39 @@
-const { engine } = require('express-handlebars');
-const hbs = require('hbs');
-const http = require('http');
-const socketIo = require('socket.io');
-const morgan = require('morgan');
-const path = require('path');
-const express = require('express');
-const exphbs = require('express-handlebars');
+import env from "./src/utils/env.js"
+import express from 'express';
+import { engine } from 'express-handlebars';
+import hbs from 'hbs';
+import http from 'http';
+import { Server as socketIo } from 'socket.io'; // Cambio aquí
+import morgan from 'morgan';
+import path from 'path';
+import bodyParser from 'body-parser';
+import expressSession from 'express-session';
+import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
+import sessionFileStore from 'session-file-store';
 
-const UsersFs = require('./src/data/fs/users.fs');
-const ProductsFs = require('./src/data/fs/products.fs');
-const OrdersFs = require('./src/data/fs/orders.fs');
+import dbConnection from './src/utils/db.js';
+import args from "./src/utils/args.js";
+import UsersFs from './src/data/fs/users.fs.js';
+import ProductsFs from './src/data/fs/products.fs.js';
+import OrdersFs from './src/data/fs/orders.fs.js';
+import errorHandler from './src/middlewares/errorHandler.mid.js';
+import IndexRouter from './src/routers/index.routers.js';
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = new socketIo(server);
 
-const usersManager = new UsersFs(path.join(__dirname, 'src', 'data', 'fs', 'files', 'users.json'));
-const productsManager = new ProductsFs(path.join(__dirname, 'src', 'data', 'fs', 'files', 'products.json'));
-const ordersManager = new OrdersFs(path.join(__dirname, 'src', 'data', 'fs', 'files', 'orders.json'));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const usersManager = new UsersFs('./src/data/fs/files/users.json');
+const productsManager = new ProductsFs('./src/data/fs/files/products.json');
+const ordersManager = new OrdersFs('./src/data/fs/files/orders.json');
+
+console.log(args);
+// console.log(productsManager);
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -25,255 +41,58 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'src', 'views'));
+app.set('views', './src/views');
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/views', express.static(path.join(__dirname, 'views')));
+app.use('/views', express.static('./views'));
 
-// Users routes
-app.get('/api/users', async (req, res, next) => {
-    try {
-        const allUsers = await usersManager.read();
-        if (allUsers.length > 0) {
-            res.json({
-                statusCode: 200,
-                response: allUsers
-            });
-        } else {
-            const notFoundError = new Error("Users not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
+const FileStore = sessionFileStore(expressSession);
 
-app.post('/api/users', async (req, res, next) => {
-    try {
-        const newUser = req.body;
-        const createdUser = await usersManager.create(newUser);
-        res.status(201).json({
-            statusCode: 201,
-            response: createdUser
-        });
-    } catch (error) {
-        next(error);
-    }
-});
+app.use(cookieParser(env.SECRET_KEY));
 
-app.get('/api/users/:uid', async (req, res, next) => {
-    const userId = req.params.uid;
-    try {
-        const user = await usersManager.readOne(userId);
-        if (user) {
-            res.json({
-                statusCode: 200,
-                response: user
-            });
-        } else {
-            const notFoundError = new Error("User not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
+// app.use(expressSession({
+//     secret: env.SECRET_KEY,
+//     resave: true,
+//     saveUninitialized: true,
+//     cookie: { maxAge: 60000 },
+// }))
 
-// Products routes
-app.get('/api/products', async (req, res, next) => {
-    try {
-        const allProducts = await productsManager.read();
-        if (allProducts.length > 0) {
-            res.json({
-                statusCode: 200,
-                response: allProducts
-            });
-        } else {
-            const notFoundError = new Error("Products not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
+// server.use(// probablemente app.use
+//     expressSession({
+//         secret: env.SECRET_KEY,
+//         resave:
+//             true,
+//         saveUninitialized: true,
+//         store:
+//             new FileStore({
+//                 path: "./src/data/fs/files/sessions",
+//                 ttl:
+//                     10000,
+//                 retries: 2,
+//             }),
+//     })
+// );
+app.use(expressSession({
+    secret: env.SECRET_KEY,
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({
+        mongoUrl: env.DB_LINK,
+        ttl: 7 * 24 * 60 * 60 // 7 days
+    })
+}));
 
-app.post('/api/products', async (req, res, next) => {
-    try {
-        // Obtener datos del nuevo producto desde el cuerpo de la solicitud
-        const { title, price, stock } = req.body;
+// store: new MongoStore({
+//     ttl: 10,
+//     mongoUrl: env.DB_LINK
+//     })
+//     }))
 
-        // Convertir el precio y el stock a valores numéricos
-        const numericPrice = parseFloat(price);
-        const numericStock = parseInt(stock);
+app.use(bodyParser.json());
 
-        // Verificar si la conversión fue exitosa
-        if (isNaN(numericPrice) || isNaN(numericStock)) {
-            // Si la conversión falla, devolver un error
-            const conversionError = new Error('Invalid price or stock format');
-            conversionError.statusCode = 400; // Bad Request
-            throw conversionError;
-        }
+app.use(errorHandler);
 
-        // Crear el nuevo objeto de producto con los valores numéricos
-        const newProduct = {
-            title,
-            price: numericPrice,
-            stock: numericStock,
-        };
-
-        // Crear el producto en el sistema de archivos
-        const createdProduct = await productsManager.create(newProduct);
-
-        // Responder con el producto creado
-        res.status(201).json({
-            statusCode: 201,
-            response: createdProduct
-        });
-
-        // Emitir el nuevo producto para actualizar la vista en tiempo real
-        io.emit('newProduct', newProduct);
-    } catch (error) {
-        // Manejar errores y pasarlos al siguiente middleware
-        next(error);
-    }
-});
-
-
-app.get('/api/products/:pid', async (req, res, next) => {
-    const productId = req.params.pid;
-    try {
-        const product = await productsManager.readOne(productId);
-        if (product) {
-            res.json({
-                statusCode: 200,
-                response: product
-            });
-        } else {
-            const notFoundError = new Error("Product not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
-
-app.put('/api/products/:pid', async (req, res, next) => {
-    const productId = req.params.pid;
-    try {
-        const updatedProduct = await productsManager.update(productId, req.body);
-        if (updatedProduct) {
-            res.json({
-                statusCode: 200,
-                response: updatedProduct
-            });
-        } else {
-            const notFoundError = new Error("Product not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
-
-app.delete('/api/products/:pid', async (req, res, next) => {
-    const productId = req.params.pid;
-    try {
-        const deleted = await productsManager.destroy(productId);
-        if (deleted) {
-            res.json({
-                statusCode: 200,
-                response: "Product deleted successfully"
-            });
-        } else {
-            const notFoundError = new Error("Product not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
-
-// Orders routes
-app.post('/api/orders', async (req, res, next) => {
-    try {
-        const newOrder = req.body;
-        const createdOrder = await ordersManager.create(newOrder);
-        res.status(201).json({
-            statusCode: 201,
-            response: createdOrder
-        });
-    } catch (error) {
-        next(error);
-    }
-});
-
-app.get('/api/orders', async (req, res, next) => {
-    try {
-        const allOrders = await ordersManager.read();
-        if (allOrders.length > 0) {
-            res.json({
-                statusCode: 200,
-                response: allOrders
-            });
-        } else {
-            const notFoundError = new Error("Orders not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
-
-app.get('/api/orders/:oid', async (req, res, next) => {
-    const orderId = req.params.oid;
-    try {
-        const order = await ordersManager.readOne(orderId);
-        if (order) {
-            res.json({
-                statusCode: 200,
-                response: order
-            });
-        } else {
-            const notFoundError = new Error("Order not found");
-            notFoundError.statusCode = 404;
-            next(notFoundError);
-        }
-    } catch (error) {
-        next(error);
-    }
-});
-
-// Add a route to serve the homepage
-app.get('/', async (req, res, next) => {
-    try {
-        const allProducts = await productsManager.read();
-        res.render('home', { title: 'Commerce Home', products: allProducts });
-    } catch (error) {
-        next(error);
-    }
-});
-
-// Add a route to serve the real-time products page
-app.get('/real', (req, res) => {
-    res.render('real-time-products', { title: 'Real-Time Products' });
-});
-
-// Add a route to serve the form page
-app.get('/form', (req, res) => {
-    res.render('product-form', { title: 'Product Form' });
-});
-
-// Add a route to serve the registration page
-app.get('/register', (req, res) => {
-    res.render('registration', { title: 'Registration Form' });
-});
+const router = new IndexRouter();
+app.use(router.getRouter());
 
 // Socket.io events
 io.on('connection', (socket) => {
@@ -291,8 +110,9 @@ io.on('connection', (socket) => {
     socket.on('newProduct', async (newProduct) => {
         try {
             // Save the new product to the backend file
+            console.log("Nuevo producto recibido:", newProduct);
             const createdProduct = await productsManager.create(newProduct);
-
+            console.log("productos creados", createdProduct);
             // Emit all products to update the real-time view for all clients
             sendProductsToClient(socket);
         } catch (error) {
@@ -316,16 +136,8 @@ async function sendProductsToClient(socket) {
     }
 }
 
-
-// Middleware for handling errors
-app.use((err, req, res, next) => {
-    res.status(err.statusCode || 500).json({
-        statusCode: err.statusCode || 500,
-        response: err.message || "Internal Server Error"
-    });
-});
-
-const PORT = process.env.PORT || 8080;
+const PORT = env.PORT || 8080;
 server.listen(PORT, () => {
     console.log(`Servidor Express escuchando en el puerto ${PORT}`);
+    dbConnection();
 });

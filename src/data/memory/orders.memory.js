@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 class OrdersMemory {
     constructor(filePath) {
@@ -10,18 +10,18 @@ class OrdersMemory {
     async loadFromFile() {
         try {
             // Simulación de carga desde memoria, no se usa archivo para OrdersMemory
-            console.log('Carga de datos de órdenes en memoria.');
+            // console.log('Carga de datos de órdenes en memoria.');
         } catch (error) {
-            console.error('Error al cargar los datos:', error);
+            // console.error('Error al cargar los datos:', error);
         }
     }
 
     async saveToFile() {
         try {
             // Simulación de guardado en memoria, no se usa archivo para OrdersMemory
-            console.log('Datos de órdenes guardados en memoria.');
+            // console.log('Datos de órdenes guardados en memoria.');
         } catch (error) {
-            console.error('Error al guardar los datos:', error);
+            // console.error('Error al guardar los datos:', error);
         }
     }
 
@@ -72,4 +72,4 @@ class OrdersMemory {
     }
 }
 
-module.exports = OrdersMemory;
+export default OrdersMemory;

@@ -4,44 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{{ name }}</title>
+    <style>
+        /* Estilos para el navbar */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
+    <nav>
+        <ul>
+            {{#if role0}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/orders">Orders</a></li>
+            {{/if}}
+            {{#if role1}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            {{/if}}
+            {{#if roleUnd}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            <li><a href="/auth/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+    <!-- Fin del navbar -->
 
-    <h1>{{ title }}</h1>
+    <h1>{{ name }}</h1>
 
-    <ul id="products-list">
+    <!-- Add your logo here -->
+    {{!-- <img src="/path/to/your/logo.png" alt="Logo"> --}}
+
+    {{#if products.length}}
+    <ul>
         {{#each products}}
-        <li>{{ this.title }} - Price: ${{ this.price }}</li>
+        <li>
+            <h3>{{ this.name }}</h3>
+            <img src="{{ this.photo }}" alt="{{ this.name }} Image">
+            <p>Price: ${{ this.price }}</p>
+            <p>Stock: {{ this.stock }}</p>
+        </li>
         {{/each}}
     </ul>
+    {{else}}
+    <p>No products available.</p>
+    {{/if}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const socket = io();
+        const socket = io();
 
-            // Receive products from the server
-            socket.on('products', (products) => {
-                updateProductList(products);
-            });
-
-            // Update the product list on the page
-            function updateProductList(products) {
-                const productList = document.getElementById('products-list');
-                productList.innerHTML = '';
-
-                products.forEach((product) => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${product.title} - $${product.price.toFixed(2)}`;
-                    productList.appendChild(listItem);
-                });
-            }
-
-            // Request initial products from the server
-            socket.emit('getProducts');
-        });
+        // Additional Socket.IO logic for the home page can be added here if needed
     </script>
 
 </body>
