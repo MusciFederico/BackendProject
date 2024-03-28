@@ -9,8 +9,8 @@ const schema = new Schema({
     state: { type: String, default: "reserved", enum: ["reserved", "payed", "delivered"] }
 }, { timestamps: true });
 
-schema.pre("find", function() { this.populate('product_id'); });
-schema.post("find", function() { this.populate('user_id'); });
+schema.pre("find", function () { this.populate('product_id'); });
+schema.post("find", function () { this.populate('user_id'); });
 
 const Order = model(collection, schema);
 

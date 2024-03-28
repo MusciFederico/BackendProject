@@ -26,50 +26,50 @@ class OrdersMemory {
     }
 
     create(data) {
-        const newOrder = {
-            id: crypto.randomBytes(6).toString('hex'),
-            pid: data.pid,
-            uid: data.uid,
-            quantity: data.quantity,
-            state: data.state
-        };
+        const newOrder = { id: crypto.randomBytes(12).toString('hex'), ...data };
         this.data.orders.push(newOrder);
         this.saveToFile(); // Guardar datos después de agregar una nueva orden en memoria
         return newOrder;
     }
 
-    read() {
+    read(obj) {
         return this.data.orders;
     }
 
-    readByUser(uid) {
-        return this.data.orders.filter(order => order.uid === uid);
-    }
-
-    update(oid, quantity, state) {
-        const orderToUpdate = this.data.orders.find(order => order.id === oid);
-        if (orderToUpdate) {
-            if (quantity !== undefined) {
-                orderToUpdate.quantity = quantity;
-            }
-            if (state !== undefined) {
-                orderToUpdate.state = state;
-            }
-            this.saveToFile(); // Guardar los cambios al actualizar una orden en memoria
-            return orderToUpdate;
+    readOne(id) {
+        const order = this.data.orders.filter(order => order.id === id);
+        if (product) {
+            return order;
+        } else {
+            console.log("El producto con el ID proporcionado no existe.");
+            return null; // O puedes manejar el caso según lo necesites
         }
-        return false; // Indica que no se encontró la orden con el ID dado
     }
 
-    destroy(oid) {
-        const index = this.data.orders.findIndex(order => order.id === oid);
+    update(id, data) {
+        const index = this.data.orders.findIndex(order => order.id === id);
         if (index !== -1) {
+            this.data.orders[index] = { ...this.data.orders[index], ...data };
+            this.saveToMemory(); // Guardar los cambios al actualizar un producto en memoria
+            this.data.orders[index];
+            return this.data.orders[index]; // Return the updated product
+        }
+        return false; // Indica que no se encontró el producto con el ID dado
+    }
+
+    destroy(id) {
+        const index = this.data.orders.findIndex(order => order.id === id);
+        if (index !== -1) {
+            const deletedOrder = this.data.orders[index];
             this.data.orders.splice(index, 1);
             this.saveToFile(); // Guardar los cambios al eliminar una orden en memoria
-            return true;
+            return deletedOrder;
         }
         return false; // Indica que no se encontró la orden con el ID dado
     }
 }
 
-export default OrdersMemory;
+const ordersMemory = new OrdersMemory
+export default ordersMemory;
+
+

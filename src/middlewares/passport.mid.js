@@ -1,10 +1,12 @@
+
+// import env from "../utils/env.js"
 // import passport from "passport"
 // import { usersManager } from "../data/mongo/manager.mongo.js"
 // import { Strategy as LocalStrategy } from "passport-local"
 // import { createHash, verifyHash } from "../utils/hash.js"
 // import { Strategy as GoogleStrategy } from "passport-google-oauth2"
 // import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-// const { GOOGLE_ID, GOOGLE_CLIENT, SECRET } = process.env
+// const { GOOGLE_ID, GOOGLE_CLIENT, SECRET } = env
 // import { createToken } from '../utils/token.js';
 
 // passport.use("register", new LocalStrategy(
@@ -58,10 +60,10 @@
 //     new GoogleStrategy(
 //         {
 //             passReqToCallback: true,
-//             // clientID: GOOGLE_ID,
-//             clientID: "175512523387-mugkb7sk5190joetn4ibeqk8qiqpt1k1.apps.googleusercontent.com",
-//             // clientSecret: GOOGLE_CLIENT,
-//             clientSecret: "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",
+//             clientID: GOOGLE_ID,
+//             // clientID: "175512523387-mugkb7sk5190joetn4ibeqk8qiqpt1k1.apps.googleusercontent.com",
+//             clientSecret: GOOGLE_CLIENT,
+//             // clientSecret: "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",
 //             callbackURL: "http://localhost:8080/sessions/google/callback"
 //         },
 //         async (req, accessToken, refreshToken, profile, done) => {
@@ -113,9 +115,10 @@
 
 
 // export default passport
+
 import env from "../utils/env.js"
 import passport from "passport"
-import { usersManager } from "../data/mongo/manager.mongo.js"
+import usersManager from '../data/mongo/users.mongo.js';
 import { Strategy as LocalStrategy } from "passport-local"
 import { createHash, verifyHash } from "../utils/hash.js"
 import { Strategy as GoogleStrategy } from "passport-google-oauth2"

@@ -9,13 +9,13 @@ class UsersRouter extends CustomRouter {
     init() {
         this.read('/', ["ADMIN"], read);
 
-        this.create('/', ["PUBLIC"], passport.authenticate("jwt", { session: false }), create);
+        this.create('/', ["PUBLIC"], create);
 
-        this.read('/:uid', ["USER", "PREMIUM"], readOne);
+        this.read('/:uid', ["PUBLIC", "PREMIUM"], readOne);
 
-        this.update('/:uid', ["USER", "PREMIUM"], update); //problemas con error forbiden
+        this.update('/:uid', ["PUBLIC", "PREMIUM"], update); //problemas con error forbiden
 
-        this.destroy('/:uid', ["USER", "PREMIUM"], destroy);
+        this.destroy('/:uid', ["PUBLIC", "PREMIUM"], destroy);
 
         this.read('/email/:email', ["ADMIN"], readByEmail);
     }

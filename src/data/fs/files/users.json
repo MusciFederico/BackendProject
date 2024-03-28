@@ -5,6 +5,13 @@
       "name": "Usuario 1",
       "photo": "ruta/imagen_user1.jpg",
       "email": "usuario1@example.com"
+    },
+    {
+      "id": "aa1bda437d6c7e88e0e587f1",
+      "name": "gasdasdasdg",
+      "email": "sadassdas@coder.com",
+      "password": "$2b$10$NC2N1x03OLFSFJYMV56j..uFP1.4irgcY5GVRlXNAYdukZ.kpmHy.",
+      "role": 0
     }
   ],
   "userIdCounter": 2

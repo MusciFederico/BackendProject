@@ -4,48 +4,49 @@ class ProductsMemory {
     constructor(filePath) {
         this.filePath = filePath;
         this.data = { products: [], productIdCounter: 1 };
-        this.loadFromFile(); // Cargar datos al inicializar la instancia
+        this.readFromMemory(); // Cargar datos al inicializar la instancia
     }
 
-    async loadFromFile() {
-        try {
-            // Simulación de carga desde memoria, no se usa archivo para ProductsMemory
-            // console.log('Carga de datos de productos en memoria.');
-        } catch (error) {
-            // console.error('Error al cargar los datos:', error);
-        }
+    async readFromMemory() {
+        // In-memory read operation, no asynchronous operation required
+        return this.data;
     }
 
-    async saveToFile() {
-        try {
-            // Simulación de guardado en memoria, no se usa archivo para ProductsMemory
-            // console.log('Datos de productos guardados en memoria.');
-        } catch (error) {
-            // console.error('Error al guardar los datos:', error);
-        }
+    async saveToMemory() {
+        // In-memory write operation, no asynchronous operation required
+        return; // You might want to handle any potential errors in a real-world scenario
     }
 
     create(data) {
-        const newProduct = { id: crypto.randomBytes(6).toString('hex'), ...data };
+        const newProduct = { id: crypto.randomBytes(12).toString('hex'), ...data };
         this.data.products.push(newProduct);
-        this.saveToFile(); // Guardar datos después de agregar un nuevo producto en memoria
+        this.saveToMemory(); // Guardar datos después de agregar un nuevo producto en memoria
         return newProduct;
     }
 
-    read() {
+    read(obj) { //filtros
+        // console.log('hola');
         return this.data.products;
     }
 
     readOne(id) {
         const stringId = String(id); // Convertir el ID proporcionado a string
-        return this.data.products.find(product => String(product.id) === stringId);
+        const product = this.data.products.find(product => String(product.id) === stringId);
+        if (product) {
+            return product;
+        } else {
+            console.log("El producto con el ID proporcionado no existe.");
+            return null; // O puedes manejar el caso según lo necesites
+        }
     }
 
     destroy(id) {
         const index = this.data.products.findIndex(product => product.id === id);
         if (index !== -1) {
+            const deletedProduct = this.data.products[index];
             this.data.products.splice(index, 1);
-            return this.saveToFile(); // Guardar los cambios al eliminar un producto en memoria
+            this.saveToMemory();
+            return deletedProduct;
         }
         return false; // Indica que no se encontró el producto con el ID dado
     }
@@ -54,11 +55,14 @@ class ProductsMemory {
         const index = this.data.products.findIndex(product => product.id === id);
         if (index !== -1) {
             this.data.products[index] = { ...this.data.products[index], ...data };
-            this.saveToFile(); // Guardar los cambios al actualizar un producto en memoria
-            return this.data.products[index];
+            this.saveToMemory(); // Guardar los cambios al actualizar un producto en memoria
+            this.data.products[index];
+            return this.data.products[index]; // Return the updated product
         }
         return false; // Indica que no se encontró el producto con el ID dado
     }
 }
 
-export default ProductsMemory;
+const productsMemory = new ProductsMemory
+export default productsMemory;
+

@@ -11,7 +11,7 @@ class SessionsController {
             return res
                 .cookie("token", req.token, {
                     maxAge: 7 * 24 * 60 * 60,
-                    httpOnly: true,
+                    // httpOnly: true,
                 })
                 .success200("Logged in!");
         } catch (error) {

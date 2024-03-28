@@ -26,7 +26,7 @@ class UsersMemory {
     }
 
     create(data) {
-        const newUser = { id: crypto.randomBytes(6).toString('hex'), ...data };
+        const newUser = { id: crypto.randomBytes(12).toString('hex'), ...data };
         this.data.users.push(newUser);
         this.saveToFile(); // Guardar datos después de agregar un nuevo usuario en memoria
         return newUser;
@@ -39,7 +39,7 @@ class UsersMemory {
     readOne(id) {
         const stringId = String(id); // Convertir el ID proporcionado a string
         return this.data.orders.find(order => String(order.oid) === stringId);
-    }
+    } //chekear
 
     destroy(id) {
         const index = this.data.users.findIndex(user => user.id === id);
@@ -60,5 +60,5 @@ class UsersMemory {
         return false; // Indica que no se encontró el usuario con el ID dado
     }
 }
-
-export default UsersMemory;
+const usersMemory = new UsersMemory()
+export default usersMemory;
