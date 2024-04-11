@@ -27,6 +27,7 @@ const schema = new Schema({
     password: { type: String, required: true },
     photo: { type: String, default: "https://i.postimg.cc/wTgNFWhR/profile.png" },
     age: { type: Number, default: 18 },
+    verified: { type: Boolean, default: false },
     role: {
         type: Number,
         default: 0,

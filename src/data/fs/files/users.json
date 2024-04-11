@@ -12,6 +12,41 @@
       "email": "sadassdas@coder.com",
       "password": "$2b$10$NC2N1x03OLFSFJYMV56j..uFP1.4irgcY5GVRlXNAYdukZ.kpmHy.",
       "role": 0
+    },
+    {
+      "id": "65c097b119ccde9fccd8b4f9",
+      "name": "Herman",
+      "email": "christmcclure17@coder.com",
+      "password": "$2b$10$VEywk7o5YEPZLMtp/PJ5Au.i6ii7VQzY2Pc9JJqSc12ywevzCs3gW",
+      "role": 0
+    },
+    {
+      "id": "87f7b9fc271be0b1b5093427",
+      "name": "Sonya",
+      "email": "raphaeljohnson1e@coder.com",
+      "password": "$2b$10$QoRP1e4ZJ6m8xd613wUB.OUHXromeB9kzfxcmxcUQ5bf.Lw7qPiZS",
+      "role": 0
+    },
+    {
+      "id": "ab6f71791d0ea5d80bfa06f9",
+      "name": "Karolann",
+      "email": "sanfordcollins12@coder.com",
+      "password": "$2b$10$dpXZ67HoVrLjo0JjQCeYwe4wRGN6u8HRNxGDonZmXMU5yzhB1LS8i",
+      "role": 0
+    },
+    {
+      "id": "e90cdaeedc27f9a449a93161",
+      "name": "Shane",
+      "email": "heathhilpert1f@coder.com",
+      "password": "$2b$10$0Z8zDVK3leIq9pu5QeUDC.JflL6Kz7Db0/nWQ5/do79YqK0HIRyxi",
+      "role": 0
+    },
+    {
+      "id": "bac9ce65fec4fa772b302b1a",
+      "name": "Consuelo",
+      "email": "orvallang38@coder.com",
+      "password": "$2b$10$A0htCC/WapbHz.vEFSMVzu8XHvVOic85puVoCfg9NSEX/Ty10jV4S",
+      "role": 0
     }
   ],
   "userIdCounter": 2

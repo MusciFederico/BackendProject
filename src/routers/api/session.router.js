@@ -1,7 +1,7 @@
 import CustomRouter from '../Customrouter.js';
 import passport from "../../middlewares/passport.mid.js";
 import passCallBack from "../../middlewares/passCallBack.mid.js";
-import { register, login, google, me, signout, badauth, } from "../../controllers/sessions.controller.js";
+import { register, login, google, me, signout, badauth, verifyAccount } from "../../controllers/sessions.controller.js";
 
 class SessionsRouter extends CustomRouter {
     init() {
@@ -20,6 +20,8 @@ class SessionsRouter extends CustomRouter {
         this.create("/signout", ["USER", "ADMIN", "PREM"], signout);
 
         this.read("/badauth", ["PUBLIC"], badauth);
+
+        this.update("/verify", ["PUBLIC"], verifyAccount);
     }
 }
 

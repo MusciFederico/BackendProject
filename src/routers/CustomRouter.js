@@ -1,7 +1,6 @@
 // import { Router } from "express";
 // import jwt from "jsonwebtoken";
-// import { usersManager } from "../data/mongo/manager.mongo.js";
-
+// import usersManager from "../data/mongo/users.mongo.js";
 // export default class CustomRouter {
 //     constructor() {
 //         this.router = Router();
@@ -70,6 +69,7 @@
 //         this.router.use(path, this.responses, this.applyCbs(cbs));
 //     };
 // }
+import env from "../utils/env.js";
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import usersManager from "../data/mongo/users.mongo.js";
@@ -106,7 +106,7 @@ export default class CustomRouter {
             let token = req.cookies["token"]
             if (!token) return res.error401
             else {
-                const data = jwt.verify(token, process.env.SECRET)
+                const data = jwt.verify(token, env.SECRET)
                 if (!data) return res.error400("Bad auth by token")
                 else {
                     const { email, role } = data

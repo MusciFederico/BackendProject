@@ -48,6 +48,24 @@
       "title": "edcfzfcas",
       "price": 2131,
       "stock": 1111
+    },
+    {
+      "id": "4a12be4c57b36f8a58571e04",
+      "name": "Awesome Frozen Keyboard",
+      "img": "https://picsum.photos/seed/i7QH16/640/480",
+      "place": "Baumbachstad",
+      "price": "215.00",
+      "stock": 50,
+      "date": "2024-04-11T22:15:36.451Z"
+    },
+    {
+      "id": "2a1a8838d031c49c230e2f7e",
+      "name": "Practical Fresh Pants",
+      "img": "https://picsum.photos/seed/FQpJem8O/640/480",
+      "place": "North Taylor",
+      "price": "295.00",
+      "stock": 50,
+      "date": "2024-04-11T22:18:08.015Z"
     }
   ],
   "productIdCounter": 2
