@@ -1,4 +1,6 @@
 import productsService from '../services/products.services.js';
+import CustomError from '../utils/customError.js';
+import errors from '../utils/errorLibrary.js';
 
 class ProductsController {
     constructor() {
@@ -12,9 +14,7 @@ class ProductsController {
             const numericStock = parseInt(stock);
 
             if (isNaN(numericPrice) || isNaN(numericStock)) {
-                const conversionError = new Error('Invalid price or stock format');
-                conversionError.statusCode = 400;
-                throw conversionError;
+                CustomError.new(errors.error)
             }
 
             const newProduct = {
@@ -42,9 +42,7 @@ class ProductsController {
             if (allProducts && allProducts.length > 0) {
                 res.success200(allProducts);
             } else {
-                const notFoundError = new Error("Products not found");
-                notFoundError.statusCode = 404;
-                next(notFoundError);
+                CustomError.new(errors.notFound)
             }
         } catch (error) {
             next(error);
@@ -76,9 +74,8 @@ class ProductsController {
             if (deleted) {
                 res.success200(deleted);
             } else {
-                const notFoundError = new Error("Product not found");
-                notFoundError.statusCode = 404;
-                next(notFoundError);
+                CustomError.new(errors.notFound)
+
             }
         } catch (error) {
             next(error);

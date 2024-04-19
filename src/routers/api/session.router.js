@@ -1,4 +1,4 @@
-import CustomRouter from '../Customrouter.js';
+import CustomRouter from '../CustomRouter.js';
 import passport from "../../middlewares/passport.mid.js";
 import passCallBack from "../../middlewares/passCallBack.mid.js";
 import { register, login, google, me, signout, badauth, verifyAccount } from "../../controllers/sessions.controller.js";

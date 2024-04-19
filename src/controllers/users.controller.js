@@ -1,4 +1,6 @@
 import usersService from '../services/users.services.js';
+import CustomError from '../utils/customError.js';
+import errors from '../utils/errorLibrary.js';
 
 class UsersController {
     constructor() {
@@ -33,9 +35,7 @@ class UsersController {
             if (user) {
                 return res.success200(user);
             } else {
-                const notFoundError = new Error("User not found");
-                notFoundError.statusCode = 404;
-                next(notFoundError);
+                CustomError.new(errors.notFound)
             }
         } catch (error) {
             next(error);
@@ -46,14 +46,12 @@ class UsersController {
         try {
             const data = req.body
             const updatedUser = await this.service.update(userId, data);
-            console.log(updatedUser);
+            // console.log(updatedUser);
             if (updatedUser) {
                 return res.success200(updatedUser);
 
             } else {
-                const notFoundError = new Error("User not found");
-                notFoundError.statusCode = 404;
-                next(notFoundError);
+                CustomError.new(errors.notFound)
             }
         } catch (error) {
             next(error);
@@ -66,9 +64,7 @@ class UsersController {
             if (deletedUser) {
                 res.success200(deletedUser);
             } else {
-                const notFoundError = new Error("User not found");
-                notFoundError.statusCode = 404;
-                next(notFoundError);
+                CustomError.new(errors.notFound)
             }
         } catch (error) {
             next(error);
@@ -82,9 +78,7 @@ class UsersController {
                 res.success200(user);
 
             } else {
-                const notFoundError = new Error("User not found");
-                notFoundError.statusCode = 404;
-                next(notFoundError);
+                CustomError.new(errors.notFound)
             }
         } catch (error) {
             next(error);

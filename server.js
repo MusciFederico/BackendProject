@@ -1,3 +1,4 @@
+
 // import env from "./src/utils/env.js"
 // import express from 'express';
 // import { engine } from 'express-handlebars';
@@ -15,9 +16,7 @@
 
 // import dbConnection from './src/utils/db.js';
 // import args from "./src/utils/args.js";
-// import UsersFs from './src/data/fs/users.fs.js';
-// import ProductsFs from './src/data/fs/products.fs.js';
-// import OrdersFs from './src/data/fs/orders.fs.js';
+// import productsFs from './src/data/fs/products.fs.js';
 // import errorHandler from './src/middlewares/errorHandler.mid.js';
 // import IndexRouter from './src/routers/index.routers.js';
 
@@ -29,9 +28,6 @@
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 
-// const usersManager = new UsersFs('./src/data/fs/files/users.json');
-// const productsManager = new ProductsFs('./src/data/fs/files/products.json');
-// const ordersManager = new OrdersFs('./src/data/fs/files/orders.json');
 
 // console.log(args);
 // // console.log(productsManager);
@@ -118,7 +114,7 @@
 //         try {
 //             // Save the new product to the backend file
 //             console.log("Nuevo producto recibido:", newProduct);
-//             const createdProduct = await productsManager.create(newProduct);
+//             const createdProduct = await productsFs.create(newProduct);
 //             console.log("productos creados", createdProduct);
 //             // Emit all products to update the real-time view for all clients
 //             sendProductsToClient(socket);
@@ -134,7 +130,7 @@
 
 // async function sendProductsToClient(socket) {
 //     try {
-//         const allProducts = await productsManager.read();
+//         const allProducts = await productsFs.read();
 //         if (allProducts.length > 0) {
 //             socket.emit('products', allProducts);
 //         }
@@ -148,6 +144,7 @@
 //     console.log(`Servidor Express escuchando en el puerto ${PORT}`);
 //     dbConnection();
 // });
+
 import env from "./src/utils/env.js"
 import express from 'express';
 import { engine } from 'express-handlebars';
@@ -162,12 +159,14 @@ import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 import sessionFileStore from 'session-file-store';
 import cors from 'cors';
+import compression from "express-compression";
 
 import dbConnection from './src/utils/db.js';
 import args from "./src/utils/args.js";
-import UsersFs from './src/data/fs/users.fs.js';
+import winstonMid from "./src/middlewares/winston.mid.js";
+import logger from "./src/utils/logger/logger.factory.js";
+
 import productsFs from './src/data/fs/products.fs.js';
-import OrdersFs from './src/data/fs/orders.fs.js';
 import errorHandler from './src/middlewares/errorHandler.mid.js';
 import IndexRouter from './src/routers/index.routers.js';
 
@@ -179,11 +178,10 @@ const io = new socketIo(server);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-console.log(args);
-// console.log(productsManager);
+logger.INFO(`environment: ${args.env}`);
 
 app.use(morgan('dev'));
+app.use(winstonMid);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -248,9 +246,11 @@ app.use(errorHandler);
 const router = new IndexRouter();
 app.use(router.getRouter());
 
+app.use(compression({ brotli: { enabled: true, zlib: {} } }));
+
 // Socket.io events
 io.on('connection', (socket) => {
-    console.log('Usuario conectado:', socket.id);
+    logger.INFO('Usuario conectado:', socket.id);
 
     // Emit products to the client on connection
     sendProductsToClient(socket);
@@ -264,18 +264,18 @@ io.on('connection', (socket) => {
     socket.on('newProduct', async (newProduct) => {
         try {
             // Save the new product to the backend file
-            console.log("Nuevo producto recibido:", newProduct);
+            logger.INFO("Nuevo producto recibido:", newProduct);
             const createdProduct = await productsFs.create(newProduct);
-            console.log("productos creados", createdProduct);
+            logger.INFO("productos creados", createdProduct);
             // Emit all products to update the real-time view for all clients
             sendProductsToClient(socket);
         } catch (error) {
-            console.error('Error creating new product:', error);
+            logger.INFO('Error creating new product:', error);
         }
     });
 
     socket.on('disconnect', () => {
-        console.log('Usuario desconectado:', socket.id);
+        logger.INFO('Usuario desconectado:', socket.id);
     });
 });
 
@@ -286,12 +286,12 @@ async function sendProductsToClient(socket) {
             socket.emit('products', allProducts);
         }
     } catch (error) {
-        console.error('Error reading products:', error);
+        logger.INFO('Error reading products:', error);
     }
 }
 
 const PORT = env.PORT || 8080;
 server.listen(PORT, () => {
-    console.log(`Servidor Express escuchando en el puerto ${PORT}`);
+    logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
     dbConnection();
 });

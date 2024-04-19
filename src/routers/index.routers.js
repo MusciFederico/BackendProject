@@ -34,7 +34,7 @@
 
 
 import passport from '../middlewares/passport.mid.js';
-import CustomRouter from './Customrouter.js';
+import CustomRouter from './CustomRouter.js';
 import sendSms from '../utils/sendSms.js';
 
 import productsRouter from './api/products.router.js';

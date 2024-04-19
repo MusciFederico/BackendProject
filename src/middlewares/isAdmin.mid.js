@@ -1,4 +1,6 @@
 import { verifytoken } from "../utils/token.js";
+import CustomError from "../utils/customError.js";
+import errors from "../utils/errorLibrary.js";
 
 export default (req, res, next) => {
     try {
@@ -6,9 +8,7 @@ export default (req, res, next) => {
         if (role === 1) {
             return next();
         } else {
-            const error = new Error("Forbidden");
-            error.statusCode = 403;
-            throw error;
+            CustomError.new(errors.forbidden)
         }
     } catch (error) {
         return next(error);

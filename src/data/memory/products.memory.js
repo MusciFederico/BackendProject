@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import logger from '../../utils/logger/logger.factory.js';
 
 class ProductsMemory {
     constructor(filePath) {
@@ -8,13 +9,11 @@ class ProductsMemory {
     }
 
     async readFromMemory() {
-        // In-memory read operation, no asynchronous operation required
         return this.data;
     }
 
     async saveToMemory() {
-        // In-memory write operation, no asynchronous operation required
-        return; // You might want to handle any potential errors in a real-world scenario
+        return;
     }
 
     create(data) {
@@ -25,7 +24,6 @@ class ProductsMemory {
     }
 
     read(obj) { //filtros
-        // console.log('hola');
         return this.data.products;
     }
 
@@ -35,7 +33,7 @@ class ProductsMemory {
         if (product) {
             return product;
         } else {
-            console.log("El producto con el ID proporcionado no existe.");
+            logger.WARN("El producto con el ID proporcionado no existe.");
             return null; // O puedes manejar el caso según lo necesites
         }
     }

@@ -3,7 +3,6 @@ import passport from "passport";
 export default (strategy) => {
     return async (req, res, next) => {
         passport.authenticate(strategy, (error, user, info) => {
-            console.log({ error, user, info });
             if (error) {
                 return next(error);
             }

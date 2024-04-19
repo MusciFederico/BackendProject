@@ -1,5 +1,6 @@
 import { promises } from 'fs';
 import crypto from 'crypto';
+import logger from '../../utils/logger/logger.factory';
 
 class UsersFs {
     constructor(filePath) {
@@ -13,21 +14,18 @@ class UsersFs {
             const fileContent = await promises.readFile(this.filePath, 'utf8');
             if (fileContent.trim() !== '') {
                 this.data = JSON.parse(fileContent);
-                // console.log('Datos de usuarios cargados exitosamente:', this.data);
             } else {
-                // console.log('El archivo de usuarios está vacío.');
             }
         } catch (error) {
-            console.error('Error al cargar el archivo:', error);
+            logger.WARN('Error al cargar el archivo:', error);
         }
     }
 
     async saveToFile() {
         try {
             await promises.writeFile(this.filePath, JSON.stringify(this.data, null, 2));
-            // console.log('Datos de productos guardados correctamente en el archivo.');
         } catch (error) {
-            console.error('Error al guardar en el archivo:', error);
+            logger.WARN('Error al guardar en el archivo:', error);
         }
     }
 

@@ -6,7 +6,6 @@ selector.addEventListener("click", async () => {
             email: document.querySelector("#email").value,
             password: document.querySelector("#password").value
         }
-        // console.log(data);
         const opts = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -14,7 +13,6 @@ selector.addEventListener("click", async () => {
         }
         let response = await fetch("/sessions/login", opts)
         response = await response.json()
-        // console.log(response);
         alert(response.message);
         if (response.statusCode === 200) {
             location.replace("/");
