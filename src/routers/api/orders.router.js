@@ -1,13 +1,12 @@
 import CustomRouter from '../Customrouter.js';
 import path from 'path';
-import { create, read, readOne, update, destroy } from '../../controllers/users.controller.js'
-import passport from "../../middlewares/passport.mid.js"
+import { report, create, read, readOne, update, destroy } from '../../controllers/orders.controller.js'
 
 class OrdersRouter extends CustomRouter {
     init() {
         this.read('/', ["USER", "PREMIUM"], read);
 
-        this.create('/', ["USER", "PREMIUM"], passport.authenticate("jwt", { session: false }), create);
+        this.create('/', ["USER", "PREMIUM"], create);
 
         this.read('/:oid', ["PUBLIC"], readOne);
 
@@ -15,7 +14,7 @@ class OrdersRouter extends CustomRouter {
 
         this.destroy('/:oid', ["USER", "PREMIUM"], destroy);
 
-        this.read('/total/:uid', ["ADMIN"], read);
+        this.read('/total/:uid', ["ADMIN"], report);
 
     }
 };

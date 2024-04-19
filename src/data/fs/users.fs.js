@@ -22,8 +22,17 @@ class UsersFs {
         }
     }
 
+    async saveToFile() {
+        try {
+            await promises.writeFile(this.filePath, JSON.stringify(this.data, null, 2));
+            // console.log('Datos de productos guardados correctamente en el archivo.');
+        } catch (error) {
+            console.error('Error al guardar en el archivo:', error);
+        }
+    }
+
     create(data) {
-        const newUser = { id: crypto.randomBytes(6).toString('hex'), ...data };
+        const newUser = { id: crypto.randomBytes(12).toString('hex'), ...data };
         this.data.users.push(newUser);
         this.saveToFile(); // Guardar datos después de agregar un nuevo usuario
         return newUser;
@@ -41,8 +50,9 @@ class UsersFs {
     destroy(id) {
         const index = this.data.users.findIndex(user => user.id === id);
         if (index !== -1) {
-            this.data.users.splice(index, 1);
-            return this.saveToFile(); // Guardar los cambios al eliminar un usuario
+            const deletedProduct = this.data.users.splice(index, 1);
+            this.saveToFile();
+            return deletedProduct
         }
         return false; // Indica que no se encontró el usuario con el ID dado
     }
@@ -50,12 +60,14 @@ class UsersFs {
     update(id, data) {
         const index = this.data.users.findIndex(user => user.id === id);
         if (index !== -1) {
-            this.data.users[index] = { ...this.data.users[index], ...data };
+            const updatedUser = this.data.users[index] = { ...this.data.users[index], ...data };
             this.saveToFile(); // Guardar los cambios al actualizar un usuario
-            return this.data.users[index];
+            return updatedUser
         }
         return false; // Indica que no se encontró el usuario con el ID dado
     }
 }
 
-export default UsersFs;
+const usersFs = new UsersFs('./src/data/fs/files/users.json');
+export default usersFs;
+

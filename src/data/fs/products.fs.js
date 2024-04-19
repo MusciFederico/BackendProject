@@ -30,13 +30,14 @@ class ProductsFs {
     }
 
     create(data) {
-        const newProduct = { id: crypto.randomBytes(6).toString('hex'), ...data };
+        const newProduct = { id: crypto.randomBytes(12).toString('hex'), ...data };
         this.data.products.push(newProduct);
         this.saveToFile(); // Guardar datos después de agregar un nuevo producto
         return newProduct;
     }
 
-    read() {
+    read(obj) {
+        //hacer algo con obj
         return this.data.products;
     }
 
@@ -48,8 +49,10 @@ class ProductsFs {
     destroy(id) {
         const index = this.data.products.findIndex(product => product.id === id);
         if (index !== -1) {
+            const deletedProduct = this.data.products[index];
             this.data.products.splice(index, 1);
-            return this.saveToFile(); // Guardar los cambios al eliminar un producto
+            this.saveToFile();
+            return deletedProduct;
         }
         return false; // Indica que no se encontró el producto con el ID dado
     }
@@ -65,4 +68,5 @@ class ProductsFs {
     }
 }
 
-export default ProductsFs;
+const productsFs = new ProductsFs('./src/data/fs/files/products.json');
+export default productsFs;

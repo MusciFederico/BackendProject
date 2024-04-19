@@ -91,5 +91,5 @@ class OrdersController {
 
 export default OrdersController;
 const controler = new OrdersController();
-const { create, read, readOne, update, destroy } = controler
-export { create, read, readOne, update, destroy };
+const { create, read, readOne, update, destroy, report } = controler
+export { create, read, readOne, update, destroy, report };
