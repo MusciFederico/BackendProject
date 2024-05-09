@@ -1,0 +1,19 @@
+config:
+  plugins:
+    metrics-by-endpoint: {}
+  target: http://localhost:8080/test
+  phases:
+    - duration: 10
+      arrivalRate: 50
+scenarios:
+  - name: login, create, read, destroy & signout
+    flow:
+      - log: login
+      - post:
+          url: /auth/login
+          json: 
+            email: ADMIN2@admin.com
+            password: hola1234
+      - log: signout
+      - post: 
+          url: /auth/signout

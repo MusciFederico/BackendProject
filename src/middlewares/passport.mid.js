@@ -133,7 +133,7 @@ passport.use("register", new LocalStrategy(
         try {
             let one = await usersRep.readByEmail(email);
             if (one) {
-                return done(null, false, { messages: "Already exists", statusCode: 400 })
+                return done(null, false, { messages: "Already exists", statusCode: 409 })
             } else {
                 let data = await req.body
                 data.password = createHash(password);
