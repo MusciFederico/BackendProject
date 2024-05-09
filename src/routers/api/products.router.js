@@ -1,4 +1,4 @@
-import CustomRouter from '../Customrouter.js';
+import CustomRouter from '../CustomRouter.js';
 import path from 'path';
 import { create, read, readOne, update, destroy } from '../../controllers/products.controller.js'
 

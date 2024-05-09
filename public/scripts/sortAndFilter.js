@@ -12,7 +12,6 @@ selector.addEventListener("click", () => {
 
         window.location.href = url;
     } catch (error) {
-        console.error(error);
-        alert("Ocurrió un error al procesar la solicitud.");
+        throw error
     }
 });

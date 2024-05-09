@@ -242,10 +242,8 @@ class SessionsController {
         try {
             const { verifycode, email } = req.body;
             const user = usersService.readByEmail(email)
-            console.log("user", user);
             if (user.verifycode === verifycode) {
                 const response = await usersService.update(id, { verified: true })
-                console.log("response", response);
                 return res.success200("verified!");
             } else {
                 res.error401();

@@ -1,9 +1,10 @@
 import { createTransport } from "nodemailer";
 import env from "./env.js";
+import logger from "./logger/logger.factory.js";
 
 async function sendEmail(data) {
     try {
-        console.log("Sending email, " + data);
+        logger.INFO("Sending email, " + data);
         const transport = createTransport({
             service: 'gmail',
             port: env.PORT || 8080,   // process.env.PORT

@@ -1,16 +1,16 @@
 import express from 'express';
 import { Server as socketio } from 'socket.io'; // Importa Server de socket.io
-
+import logger from '../../utils/logger/logger.factory.js';
 
 const eventsRouter = (server) => {
     const router = express.Router(); // si se quiere usa en otros lados 
     const io = socketio(server);
 
     io.on('connection', (socket) => {
-        console.log('Usuario conectado:', socket.id);
+        logger.INFO('Usuario conectado:', socket.id);
 
         socket.on('disconnect', () => {
-            console.log('Usuario desconectado:', socket.id);
+            logger.INFO('Usuario desconectado:', socket.id);
         });
     });
 

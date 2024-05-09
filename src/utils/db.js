@@ -1,12 +1,13 @@
 import { connect } from "mongoose";
 import env from "./env.js";
+import logger from "./logger/logger.factory.js";
 
 const dbConnection = async () => {
     try {
         await connect(env.DB_LINK);
-        console.log("db connected",);
+        logger.INFO("db connected",);
     } catch (error) {
-        console.log(error);
+        logger.ERROR(error);
     }
 };
 

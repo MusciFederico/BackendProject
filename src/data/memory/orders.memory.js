@@ -1,34 +1,27 @@
 import crypto from 'crypto';
+import logger from '../../utils/logger/logger.factory.js';
+
 
 class OrdersMemory {
     constructor(filePath) {
         this.filePath = filePath;
         this.data = { orders: [], orderIdCounter: 1 };
-        this.loadFromFile(); // Cargar datos al inicializar la instancia
+        this.readFromMemory(); // Cargar datos al inicializar la instancia
     }
 
-    async loadFromFile() {
-        try {
-            // Simulación de carga desde memoria, no se usa archivo para OrdersMemory
-            // console.log('Carga de datos de órdenes en memoria.');
-        } catch (error) {
-            // console.error('Error al cargar los datos:', error);
-        }
+    async readFromMemory() {
+        return this.data;
     }
 
-    async saveToFile() {
-        try {
-            // Simulación de guardado en memoria, no se usa archivo para OrdersMemory
-            // console.log('Datos de órdenes guardados en memoria.');
-        } catch (error) {
-            // console.error('Error al guardar los datos:', error);
-        }
+    async saveToMemory() {
+        return;
     }
+
 
     create(data) {
         const newOrder = { id: crypto.randomBytes(12).toString('hex'), ...data };
         this.data.orders.push(newOrder);
-        this.saveToFile(); // Guardar datos después de agregar una nueva orden en memoria
+        this.saveToMemory(); // Guardar datos después de agregar una nueva orden en memoria
         return newOrder;
     }
 
@@ -41,7 +34,7 @@ class OrdersMemory {
         if (product) {
             return order;
         } else {
-            console.log("El producto con el ID proporcionado no existe.");
+            logger.WARN("El producto con el ID proporcionado no existe.");
             return null; // O puedes manejar el caso según lo necesites
         }
     }
@@ -62,7 +55,7 @@ class OrdersMemory {
         if (index !== -1) {
             const deletedOrder = this.data.orders[index];
             this.data.orders.splice(index, 1);
-            this.saveToFile(); // Guardar los cambios al eliminar una orden en memoria
+            this.saveToMemory(); // Guardar los cambios al eliminar una orden en memoria
             return deletedOrder;
         }
         return false; // Indica que no se encontró la orden con el ID dado

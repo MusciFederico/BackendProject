@@ -10,7 +10,7 @@
 //     async create(data) {
 //         try {
 //             const one = await this.model.create(data);
-//             return one.id;
+//             return one;
 //         } catch (error) {
 //             throw error;
 //         }
@@ -137,14 +137,15 @@
 //     }
 // }
 
-// const usersManager = new MongoManager(User);
-// const productsManager = new MongoManager(Product);
-// const ordersManager = new MongoManager(Order);
 
-// export { usersManager, productsManager, ordersManager };
+
+// export default MongoManager
 import User from "./models/user.model.js";
 import Product from "./models/product.model.js";
 import Order from "./models/order.model.js";
+import CustomError from "../../utils/customError.js";
+import errors from "../../utils/errorLibrary.js";
+import logger from "../../utils/logger/logger.factory.js";
 
 class MongoManager {
     constructor(model) {
@@ -177,9 +178,8 @@ class MongoManager {
             const all = await this.model.find(query).sort(sortQuery);
 
             if (all.length === 0) {
-                const error = new Error("There aren't products");
-                error.statusCode = 404;
-                throw error;
+                CustomError.new(errors.notFound)
+
             }
             return all;
         } catch (error) {
@@ -191,9 +191,7 @@ class MongoManager {
         try {
             const one = await this.model.findById(id);
             if (!one) {
-                const error = new Error("There isn't product");
-                error.statusCode = 404;
-                throw error;
+                CustomError.new(errors.notFound)
             }
             return one;
         } catch (error) {
@@ -221,9 +219,7 @@ class MongoManager {
             const opt = { new: true };
             const one = await this.model.findByIdAndUpdate(id, data, opt);
             if (!one) {
-                const error = new Error("There isn't product");
-                error.statusCode = 404;
-                throw error;
+                CustomError.new(errors.notFound)
             }
             return one;
         } catch (error) {
@@ -235,9 +231,7 @@ class MongoManager {
         try {
             const one = await this.model.findByIdAndDelete(id);
             if (!one) {
-                const error = new Error("There isn't product");
-                error.statusCode = 404;
-                throw error;
+                CustomError.new(errors.notFound)
             }
             return one;
         } catch (error) {
@@ -250,7 +244,7 @@ class MongoManager {
             const orders = await Order.find({ user_id: uid });
 
             if (orders.length === 0) {
-                return "El usuario no tiene órdenes.";
+                CustomError.new(errors.notFound)
             }
 
             let totalCost = 0;
@@ -261,7 +255,7 @@ class MongoManager {
 
             return totalCost;
         } catch (error) {
-            console.error("Error al calcular el costo total:", error);
+            logger.WARN("Error al calcular el costo total:", error);
             throw error;
         }
     }
@@ -269,13 +263,13 @@ class MongoManager {
     async readOrdersById(uid) {
         try {
             const orders = await Order.find({ user_id: uid });
-            console.log("orders manager:", orders);
+            logger.WARN("orders manager:", orders);
             if (orders.length === 0) {
                 return "El usuario no tiene órdenes.";
             }
             return orders;
         } catch (error) {
-            console.error("Error al buscar ordenes del usuario:", error);
+            logger.WARN("Error al buscar ordenes del usuario:", error);
             throw error;
         }
     }
@@ -284,4 +278,5 @@ class MongoManager {
 
 
 export default MongoManager
+
 

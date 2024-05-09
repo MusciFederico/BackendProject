@@ -10,7 +10,6 @@ selector.addEventListener("click", async () => {
             photo: document.querySelector("#photo").value,
             age: document.querySelector("#age").value
         }
-        // console.log(data);
         const opts = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
