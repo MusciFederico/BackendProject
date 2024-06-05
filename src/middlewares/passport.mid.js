@@ -124,7 +124,7 @@ import { Strategy as LocalStrategy } from "passport-local"
 import { createHash, verifyHash } from "../utils/hash.js"
 import { Strategy as GoogleStrategy } from "passport-google-oauth2"
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
-const { GOOGLE_ID, GOOGLE_CLIENT, SECRET } = env
+// const { GOOGLE_ID, GOOGLE_CLIENT, SECRET } = env
 import { createToken } from '../utils/token.js';
 
 passport.use("register", new LocalStrategy(
@@ -175,8 +175,8 @@ passport.use(
     new GoogleStrategy(
         {
             passReqToCallback: true,
-            clientID: GOOGLE_ID,
-            clientSecret: GOOGLE_CLIENT,
+            clientID: env.GOOGLE_ID,
+            clientSecret: env.GOOGLE_CLIENT,
             callbackURL: "http://localhost:8080/sessions/google/callback"
         },
         async (req, accessToken, refreshToken, profile, done) => {
@@ -209,7 +209,7 @@ passport.use(
     "jwt",
     new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies["token"]]),
-        secretOrKey: SECRET
+        secretOrKey: env.SECRET
     }, async (payload, done) => {
         try {
             const user = await usersRep.readByEmail(payload.email);
