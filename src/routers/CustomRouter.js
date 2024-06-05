@@ -102,13 +102,15 @@ export default class CustomRouter {
     }
     policies = (arrayOfPolicies) => async (req, res, next) => {
         try {
-            if (arrayOfPolicies.includes("PUBLIC")) return next(); //parece no contemplar casos de forbidenn
+            if (arrayOfPolicies.includes("PUBLIC")) return next();
             let token = req.cookies["token"]
-            if (!token) return res.error401
-            else {
+            if (!token) {
+                return res.status(401).json({ message: "Unauthorized" });
+            } else {
                 const data = jwt.verify(token, env.SECRET)
-                if (!data) return res.error400("Bad auth by token")
-                else {
+                if (!data) {
+                    return res.status(400).json({ message: "Bad auth by token" });
+                } else {
                     const { email, role } = data
                     if (
                         role === 0 && arrayOfPolicies.includes("USER") ||
@@ -118,7 +120,9 @@ export default class CustomRouter {
                         const user = await usersManager.readByEmail(email)
                         req.user = user
                         return next()
-                    } else return res.error403()
+                    } else {
+                        return res.status(403).json({ message: "Forbidden" });
+                    }
                 }
             }
         } catch (error) {

@@ -6,6 +6,7 @@
   "dependencies": {
     "artillery": "^1.7.4",
     "artillery-plugin-metrics-by-endpoint": "^1.5.0",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "commander": "^12.0.0",
@@ -47,13 +48,19 @@
     "report": "artillery report ./test/flow/flow.json",
     "image": "docker build -t fedemusci/projectbackend:1.0.4 .",
     "container": "docker run -p 8080:8080 fedemusci/projectbackend:1.0.4 .",
-    "orchestra": "kubectl apply -f ./orchestra.yaml"
+    "orchestra": "kubectl apply -f ./orchestra.yaml",
+    "mocha": "mocha ./test/mocha",
+    "chai": "mocha ./test/chai",
+    "supertest": "mocha ./test/supertest"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
+    "@faker-js/faker": "^8.4.1",
+    "chai": "^5.1.1",
+    "mocha": "^10.4.0",
+    "supertest": "^7.0.0"
   }
 }

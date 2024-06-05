@@ -153,6 +153,7 @@ passport.use("login", new LocalStrategy(
             const user = await usersRep.readByEmail(email)
             if (user) {
                 const verify = verifyHash(password, user.password)
+                // const verify = true
                 if (verify) {
                     const token = createToken({ email, role: user.role });
                     req.token = token;

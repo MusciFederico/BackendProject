@@ -12,7 +12,7 @@ scenarios:
       - post:
           url: /auth/login
           json: 
-            email: ADMIN2@admin.com
+            email: ADMIN10@admin.com
             password: hola1234
       - log: signout
       - post: 
