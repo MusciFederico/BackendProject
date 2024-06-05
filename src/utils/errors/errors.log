@@ -35,3 +35,11 @@
 [41m[31m[9mERROR[29m[39m[49m: environment: test
 [43m[33m[1mWARN[22m[39m[49m: environment: test
 [41m[31m[9mERROR[29m[39m[49m: environment: test
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')
+[41m[31m[9mERROR[29m[39m[49m: Cannot read properties of undefined (reading 'statusCode')

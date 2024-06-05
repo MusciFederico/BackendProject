@@ -1,0 +1,126 @@
+components:
+  schemas:
+    Register:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of user
+        email:
+          type: string
+          description: email of user
+        password:
+          type: string
+          description: password of user, must be 8 characters
+      example:
+        name: fede3
+        email: muscifede3@gmail.com
+        password: hola1234
+
+  responses:
+    res201:
+      description: Successful Code
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                description: Successful Code
+              response:
+                type: string
+                description: Registered!
+            example:
+              statusCode: 200
+              response: Registered!
+
+    res400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                description: Error Code
+              error:
+                type: string
+                description: Description of the error
+            example:
+              statusCode: 400
+              error: Bad Request
+
+    res401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                description: Error Code
+              error:
+                type: string
+                description: Description of the error
+            example:
+              statusCode: 401
+              error: Data in request body is incomplete
+
+    res409:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+                description: Error Code
+              error:
+                type: string
+                description: Description of the error
+            example:
+              statusCode: 409
+              error: Already exists
+
+paths:
+  /sessions/register:
+    post:
+      summary: To register a user
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        description: data of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/res201'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/res400'
+        '401':
+          description: No credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/res401'
+        '409':
+          description: Already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/res409'

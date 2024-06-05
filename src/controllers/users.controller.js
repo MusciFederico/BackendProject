@@ -46,7 +46,6 @@ class UsersController {
         try {
             const data = req.body
             const updatedUser = await this.service.update(userId, data);
-            // console.log(updatedUser);
             if (updatedUser) {
                 return res.success200(updatedUser);
 

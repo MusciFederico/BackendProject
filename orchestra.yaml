@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: projectbackend
+spec:
+  selector:
+    app: projectbackend
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projectbackend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: projectbackend
+  template:
+    metadata:
+      labels:
+        app: projectbackend
+    spec:
+      containers:
+        - name: projectbackend
+          image: fedemusci/projectbackend:1.0.0
+          ports:
+            - containerPort: 8080

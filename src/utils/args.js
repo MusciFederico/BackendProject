@@ -4,7 +4,7 @@ const args = new Command()
 
 args.option("-p <port>", "port")
 
-args.option("--env <env>", "environment", "prod")
+args.option("--env <env>", "environment", "test")
 
 args.parse()
 

@@ -1,6 +1,6 @@
 import { promises } from 'fs';
 import crypto from 'crypto';
-import logger from '../../utils/logger/logger.factory';
+import logger from '../../utils/logger/logger.factory.js';
 
 class UsersFs {
     constructor(filePath) {

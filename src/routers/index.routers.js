@@ -1,5 +1,6 @@
 // import passport from '../middlewares/passport.mid.js';
-// import CustomRouter from './Customrouter.js';
+// import CustomRouter from './CustomRouter.js';
+// import sendSms from '../utils/sendSms.js';
 
 // import productsRouter from './api/products.router.js';
 // import ordersRouter from './api/orders.router.js';
@@ -18,7 +19,7 @@
 //     init() {
 //         this.use('/api/users', usersRouter);
 //         this.use('/api/products', productsRouter);
-//         this.use('/api/orders', passport.authenticate("jwt", { session: false }), ordersRouter);
+//         this.use('/api/orders', ordersRouter);
 //         this.use("/sessions", sessionsRouter);
 
 //         this.use('/events', eventsRouter);
@@ -32,10 +33,10 @@
 //     }
 // }
 
-
 import passport from '../middlewares/passport.mid.js';
 import CustomRouter from './CustomRouter.js';
 import sendSms from '../utils/sendSms.js';
+import { Router } from "express"
 
 import productsRouter from './api/products.router.js';
 import ordersRouter from './api/orders.router.js';
@@ -49,6 +50,10 @@ import viewsProductFormRouter from './views/product-form.router.js';
 import viewsRegistrationRouter from './views/registration.router.js';
 import viewsLoginRouter from './views/login.router.js';
 import viewsUserOrdersrouter from './views/user-orders.router.js';
+
+import testingRouter from './api/test.router.js';
+
+const router = Router();
 
 export default class IndexRouter extends CustomRouter {
     init() {
@@ -65,5 +70,6 @@ export default class IndexRouter extends CustomRouter {
         this.use('/auth/register', viewsRegistrationRouter);
         this.use('/auth/login', viewsLoginRouter);
         this.use('/orders', viewsUserOrdersrouter);
+        this.use('/test', testingRouter);
     }
 }

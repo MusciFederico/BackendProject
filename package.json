@@ -4,7 +4,10 @@
   "description": "[![NPM Version][npm-version-image]][npm-url] [![NPM Downloads][npm-downloads-image]][npm-url] [![Linux Build][github-actions-ci-image]][github-actions-ci-url] [![Windows Build][appveyor-image]][appveyor-url] [![Test Coverage][coveralls-image]][coveralls-url]",
   "main": "server.js",
   "dependencies": {
+    "artillery": "^1.7.4",
+    "artillery-plugin-metrics-by-endpoint": "^1.5.0",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "commander": "^12.0.0",
     "connect-mongo": "^5.1.0",
@@ -21,7 +24,7 @@
     "mongoose": "^8.1.1",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.13",
-    "nodemon": "^3.0.3",
+    "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-jwt": "^4.0.1",
@@ -29,6 +32,8 @@
     "session": "^0.1.0",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.7.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "twilio": "^5.0.3",
     "winston": "^3.13.0"
   },
@@ -36,13 +41,26 @@
     "start": "node server.js",
     "dev": "nodemon server.js --env dev",
     "test": "nodemon server.js --env test",
-    "prod": "nodemon server.js --env prod"
+    "prod": "nodemon server.js --env prod",
+    "simplex": "artillery quick --count 40 --num 50 'http://localhost:8080/test/simplex' -o ./test/quick/simplex.json",
+    "complex": "artillery quick --count 40 --num 50 'http://localhost:8080/test/complex' -o ./test/quick/complex.json",
+    "performance": "artillery run ./test/flow/flow.yaml --output ./test/flow/flow.json",
+    "report": "artillery report ./test/flow/flow.json",
+    "image": "docker build -t fedemusci/projectbackend:1.0.4 .",
+    "container": "docker run -p 8080:8080 fedemusci/projectbackend:1.0.4 .",
+    "orchestra": "kubectl apply -f ./orchestra.yaml",
+    "mocha": "mocha ./test/mocha",
+    "chai": "mocha ./test/chai",
+    "supertest": "mocha ./test/supertest"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
+    "@faker-js/faker": "^8.4.1",
+    "chai": "^5.1.1",
+    "mocha": "^10.4.0",
+    "supertest": "^7.0.0"
   }
 }

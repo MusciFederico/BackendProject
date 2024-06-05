@@ -66,6 +66,306 @@
       "price": "295.00",
       "stock": 50,
       "date": "2024-04-11T22:18:08.015Z"
+    },
+    {
+      "id": "54cd4a8e2456493d7898d952",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "37e6dae74016ded518e459d0",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "e0ac7caa3f1d23b932a96994",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "5743ce8ca3f9e66dbfe6bf6c",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "2be38420cc66e574189da235",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "d9d3f6410a027de561213c9e",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "74498fb63fc87d842f82a681",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "6a15db82ea4edb2483afc127",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "fbaee4c59d6756d685b0ea64",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "ab32fbc7878a31ea41a95a2e",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "b350c9b57d8725c1de625af7",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "0b9f8eb692bc45609d3e15c6",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "100b3ac2284cd124e70a7fa9",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "e75a98f9ecf99d6a528389e6",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "41453e4da6edff03e0b0cc50",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "43f39e3e5d9cad853b984206",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "66ac9be3875c40fe895dcf22",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "d4f536026152289bb48c9d3e",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "62c454f5bdc79d4e581e3cf6",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "7cfe7b07f1be9f6759a077b3",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "632a174e9b76a863fc19096c",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "758e687f5e0252cb34188f3d",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "22e05d73ca681efdac37ba4d",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "70820967905eda061e9e5fc0",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "284c59677a7c7cc7d6474f3e",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "467de6928eb5766872168a96",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "c839c98c4bca24562f864857",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "3edf0df524df6ed268346a0d",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "d9822377266b681a009ad37d",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "067f94381e8267fe7e06cd97",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "af1c25ead574a9c43ecd671e",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "1a8f3a54ea6885670ab88498",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "1fd3bb7742e11c79c72c3f62",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "fa9fa69769ceda61c63a3276",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "3e6f3ba323bebf6cd4efa27c",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "0a412a6f1d46f8429c81de62",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "e5fa2ca2d16161d9bf68da94",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "8d0d0e7cff0b542cbf9bbc67",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "41faba995c6134c1a06bc5ad",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "55be6045bd1d258ee815c07e",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "d12a676381150a321fd2d5e7",
+      "name": "remera",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "38a5ffb71d70e5699aad19d2",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "ecff1bcd5003106ff2009415",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "5d4452504b734afe0b43b33f",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "dcf0e1fc22ec7a5b58e33fc0",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "edce64f1d99ce8507d6c4efc",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "5561bcd0b726057cd9a5e97b",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "ea5d78102a40dfd9edcd3589",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "acf3705b172a7412fb9bfe06",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
+    },
+    {
+      "id": "de5e10fa6c641d2576ea0fe4",
+      "name": "pantalon",
+      "place": "Lugar de origen",
+      "img": "https://example.com/image.jpg"
     }
   ],
   "productIdCounter": 2
