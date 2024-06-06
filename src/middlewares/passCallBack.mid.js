@@ -14,6 +14,7 @@ export default (strategy) => {
             }
             req.user = user;
             return next();
+            // yes
         })(req, res, next);
     };
 };
