@@ -1,14 +1,21 @@
-FROM node 
+# Use an official Node.js runtime as a parent image
+FROM node:18
 
-WORKDIR /fedemusci/projectbackend:1.0.4
+# Set the working directory
+WORKDIR /fedemusci/projectbackend
 
-COPY package*json ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-RUN npm install 
+# Install dependencies, including the necessary build tools
+RUN apt-get update && apt-get install -y python3 make g++ && \
+    npm install
 
+# Copy the rest of the application code
 COPY . .
 
+# Expose the port the app runs on
 EXPOSE 8080
 
-CMD ["npm","run","test"]
-
+# Define the command to run the app
+CMD ["npm", "start"]

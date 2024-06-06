@@ -325,17 +325,22 @@ async function sendProductsToClient(socket) {
     }
 }
 
-logger.INFO(`clusterIsPrimary: ${cluster.isPrimary}`)
-if (cluster.isPrimary) {
-    const cpuCores = cpus().length;
-    logger.INFO(`cpuCores: ${cpuCores}`)
-    logger.INFO(`Primary Id: ${process.pid}`)
-    for (let i = 1; i <= cpuCores; i++) { cluster.fork(); }
-} else {
-    server.listen(PORT, () => {
-        logger.INFO(`Worker Id: ${process.pid}`)
-        logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
-        dbConnection();
-    });
-}
+// logger.INFO(`clusterIsPrimary: ${cluster.isPrimary}`)
+// if (cluster.isPrimary) {
+//     const cpuCores = cpus().length;
+//     logger.INFO(`cpuCores: ${cpuCores}`)
+//     logger.INFO(`Primary Id: ${process.pid}`)
+//     for (let i = 1; i <= cpuCores; i++) { cluster.fork(); }
+// } else {
+//     server.listen(PORT, () => {
+//         logger.INFO(`Worker Id: ${process.pid}`)
+//         logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
+//         dbConnection();
+//     });
+// }
 
+server.listen(PORT, () => {
+    logger.INFO(`Worker Id: ${process.pid}`)
+    logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
+    dbConnection();
+});
