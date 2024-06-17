@@ -1,20 +1,3 @@
-// import express from 'express';
-// import { verifytoken } from '../../utils/token.js';
-
-// const router = express.Router();
-
-// router.get('/', async (req, res, next) => {
-//     try {
-//         res.render('registration', {
-//             title: 'Registration Form',
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
-// export default router;
-
 
 import CustomRouter from '../CustomRouter.js';
 import isAuthMid from '../../middlewares/isAuth.mid.js';

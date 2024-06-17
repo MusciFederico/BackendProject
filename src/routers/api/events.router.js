@@ -18,29 +18,3 @@ const eventsRouter = (server) => {
 };
 
 export default eventsRouter;
-
-// import CustomRouter from '../Customrouter.js';
-// import { Server as SocketIOServer } from 'socket.io';
-
-// class EventsRouter extends CustomRouter {
-//     constructor(server) {
-//         super();
-//         this.io = new SocketIOServer(server);
-//         this.init();
-//     }
-
-//     init() {
-//         this.io.on('connection', (socket) => {
-//             console.log('Usuario conectado:', socket.id);
-
-//             socket.on('disconnect', () => {
-//                 console.log('Usuario desconectado:', socket.id);
-//             });
-
-//             // Aquí puedes definir más eventos de Socket.IO
-//         });
-//     }
-// }
-
-// const eventsRouter = new EventsRouter();
-// export default eventsRouter.getRouter();
