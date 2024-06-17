@@ -21,7 +21,6 @@ class MongoManager {
 
     async read({ filterObj, sortObj }) {
         try {
-            console.log("mongo", filterObj, sortObj);
             // Initialize query and sortQuery objects
             let query = {};
             let sortQuery = {};

@@ -75,7 +75,7 @@ export default class IndexRouter extends CustomRouter {
         this.use('/details', viewsDetailsRouter);
         // this.use('/real', viewsRealTimeProductsRouter);
         this.use('/products/form', viewsProductFormRouter);
-        // this.use('/auth/register', viewsRegistrationRouter);
+        this.use('/auth/register', viewsRegistrationRouter);
         this.use('/auth/login', viewsLoginRouter);
         // this.use('/orders', viewsUserOrdersrouter);
         this.use('/test', testingRouter);

@@ -116,7 +116,6 @@ nameFilter.addEventListener("click", (event) => {
     try {
         alert("event.target");
         const nameinput = document.querySelector('#nameInput').value;
-        console.log(nameinput);
         updateFilterCriteria({ name: nameinput });
     } catch (error) {
         alert("Error applying filter");

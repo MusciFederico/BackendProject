@@ -8,8 +8,12 @@ WORKDIR /fedemusci/projectbackend
 COPY package*.json ./
 
 # Install dependencies, including the necessary build tools
-RUN apt-get update && apt-get install -y python3 make g++ && \
-    npm install
+RUN apt-get update && apt-get install -y python3 make g++
+
+# Install Node.js dependencies
+RUN npm install
+
+
 
 # Copy the rest of the application code
 COPY . .
