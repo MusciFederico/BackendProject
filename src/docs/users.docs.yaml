@@ -1,126 +1,436 @@
+openapi: 3.0.0
+info:
+  title: Users API
+  version: 1.0.0
+
 components:
   schemas:
-    Register:
+    User:
       type: object
       properties:
         name:
           type: string
-          description: name of user
+          description: Name of the user
+        last_name:
+          type: string
+          description: Last name of the user
         email:
           type: string
-          description: email of user
+          format: email
+          description: Email address of the user (must be unique)
         password:
           type: string
-          description: password of user, must be 8 characters
+          description: Password of the user (must be at least 8 characters long), is hashed after creation
+        photo:
+          type: string
+          description: URL of the user's profile photo
+          default: "https://i.postimg.cc/wTgNFWhR/profile.png"
+        age:
+          type: integer
+          description: Age of the user
+          default: 18
+        verified:
+          type: boolean
+          description: Whether the user's email address is verified
+          default: false
+        role:
+          type: integer
+          description: Role of the user
+          default: 0
+          enum: [0, 1, 2]
       example:
-        name: fede3
-        email: muscifede3@gmail.com
-        password: hola1234
+        name: "John"
+        last_name: "Doe"
+        email: "john.doe1@example.com"
+        password: "hola1234"
+        photo: "https://example.com/profile.jpg"
+        age: 25
+        verified: true
+        role: 1
 
   responses:
-    res201:
-      description: Successful Code
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-                description: Successful Code
-              response:
-                type: string
-                description: Registered!
-            example:
-              statusCode: 200
-              response: Registered!
-
-    res400:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-                description: Error Code
-              error:
-                type: string
-                description: Description of the error
-            example:
-              statusCode: 400
-              error: Bad Request
-
-    res401:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-                description: Error Code
-              error:
-                type: string
-                description: Description of the error
-            example:
-              statusCode: 401
-              error: Data in request body is incomplete
-
-    res409:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-                description: Error Code
-              error:
-                type: string
-                description: Description of the error
-            example:
-              statusCode: 409
-              error: Already exists
-
-paths:
-  /sessions/register:
-    post:
-      summary: To register a user
-      tags:
-        - Sessions
-      requestBody:
-        required: true
-        description: data of the user
+    CreateUserResponses:
+      res200:
+        description: Successful creation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Register'
+              $ref: '#/components/schemas/User'
+            example:
+              name: "facu"
+              email: "mailnormal@coder.com"
+              password: "$2b$10$zMEVFgRiW5fgI0TpBGRROek/UJwn/BcdCiHuZHhp49MedB5i9GYX6"
+              photo: "https://i.postimg.cc/wTgNFWhR/profile.png"
+              age: 18
+              verified: false
+              role: 0
+              _id: "b1b4162c5d47fd6b65993f2e"
+              createdAt: "2024-06-13T16:50:33.756Z"
+              updatedAt: "2024-06-13T16:50:33.756Z"
+              __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res500:
+        description: Internal Server Error - Duplicate Key
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  example: 500
+                url:
+                  type: string
+                  example: POST /api/users
+                message:
+                  type: string
+                  example: "E11000 duplicate key error collection: test.users index: email_1 dup key: { email: \"mailnormal@coder.com\" }"
+
+    ReadOneUsersResponses:
+      res200:
+        description: Successful retrieval of a user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              name: "John"
+              last_name: "Doe"
+              email: "john.doe1@example.com"
+              password: "$2b$10$zMEVFgRiW5fgI0TpBGRROek/UJwn/BcdCiHuZHhp49MedB5i9GYX6"
+              photo: "https://i.postimg.cc/wTgNFWhR/profile.png"
+              age: 25
+              verified: true
+              role: 1
+              _id: "65dbe4dcc8846a73e394f45f"
+              createdAt: "2024-02-26T01:09:48.744Z"
+              updatedAt: "2024-06-13T17:30:00.000Z"
+              __v: 0
+
+      res404:
+        description: User not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: GET /api/users/{uid}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: GET /api/users/65dbe4dcc8846a73e394f45f
+              message: User not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/users/{uid}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "GET /api/users/65dbe4dcc8846a73e394f45"
+                message: "Cast to ObjectId failed for value \"65dbe4dcc8846a73e394f45\" (type string) at path \"_id\" for model \"products\""
+
+    UpdateUserResponses:
+      res200:
+        description: Successful update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              _id: "65dbe4dcc8846a73e394f45f"
+              name: "ADMIN"
+              email: "ADMIN@admin.com"
+              password: "$2b$10$26Jvz1SKpuUrdvZAbMn55OafxSX66AS7L5WunM8P9T9/lvIdkA4t."
+              photo: "https://i.postimg.cc/wTgNFWhR/profile.png"
+              age: 18
+              verified: false
+              role: 1
+              createdAt: "2024-02-26T01:09:48.744Z"
+              updatedAt: "2024-06-13T17:30:00.000Z"
+              __v: 0
+
+      res400:
+        description: Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: 
+                  type: number  
+                  description: Error 
+                url:  
+                  type: string  
+                  description: PUT /api/users/  
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              statusCode: 400
+              url: "PUT /api/users/666fa4c4c424c794030fa57a"
+              message: "Error"
+
+      res404:
+        description: User not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: PUT /api/users/{uid}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: PUT /api/users/65dbe4dcc8846a73e394f45f
+              message: User not found
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: PUT /api/users/{uid}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "PUT /api/users/65dbe4dcc8846a73e394f45f"
+                message: Internal server error occurred while processing the request.
+
+    DestroyUserResponses:
+      res200:
+        description: Successful deletion
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              _id: "65dbe4dcc8846a73e394f45f"
+              name: "ADMIN"
+              email: "ADMIN@admin.com"
+              password: "$2b$10$26Jvz1SKpuUrdvZAbMn55OafxSX66AS7L5WunM8P9T9/lvIdkA4t."
+              photo: "https://i.postimg.cc/wTgNFWhR/profile.png"
+              age: 18
+              verified: false
+              role: 1
+              createdAt: "2024-02-26T01:09:48.744Z"
+              updatedAt: "2024-06-13T17:30:00.000Z"
+              __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res404:
+        description: User not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: DELETE /api/users/{uid}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: DELETE /api/users/65dbe4dcc8846a73e394f45f
+              message: User not found
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: DELETE /api/users/{uid}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "DELETE /api/users/65dbe4dcc8846a73e394f45f"
+                message: Internal server error occurred while processing the request.
+paths:
+  /api/users:
+    post:
+      summary: Create a user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        description: Data of the user to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
       responses:
         '201':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/res201'
+          $ref: '#/components/responses/CreateUserResponses/res201'
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/res400'
+          $ref: '#/components/responses/CreateUserResponses/res400'
         '401':
-          description: No credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/res401'
-        '409':
-          description: Already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/responses/res409'
+          $ref: '#/components/responses/CreateUserResponses/res401'
+        '500':
+          $ref: '#/components/responses/CreateUserResponses/res500'
+
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadUsersResponses/res200'
+        '500':
+          $ref: '#/components/responses/ReadUsersResponses/res500'
+
+  /api/users/{userId}:
+    get:
+      summary: Get a user by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to retrieve
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadOneUsersResponses/res200'
+        '404':
+          $ref: '#/components/responses/ReadOneUsersResponses/res404'
+        '500':
+          $ref: '#/components/responses/ReadOneUsersResponses/res500'
+
+    put:
+      summary: Update a user by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to update
+      requestBody:
+        required: true
+        description: New data of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateUserResponses/res200'
+        '400':
+          $ref: '#/components/responses/UpdateUserResponses/res400'
+        '401':
+          $ref: '#/components/responses/UpdateUserResponses/res401'
+        '404':
+          $ref: '#/components/responses/UpdateUserResponses/res404'
+        '500':
+          $ref: '#/components/responses/UpdateUserResponses/res500'
+
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to delete
+      responses:
+        '200':
+          $ref: '#/components/responses/DestroyUserResponses/res200'
+        '401':
+          $ref: '#/components/responses/DestroyUserResponses/res401'
+        '404':
+          $ref: '#/components/responses/DestroyUserResponses/res404'
+        '500':
+          $ref: '#/components/responses/DestroyUserResponses/res500'

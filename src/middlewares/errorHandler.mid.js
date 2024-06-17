@@ -17,10 +17,9 @@ export default (error, req, res, next) => {
     } else {
         logger.WARN(error.message);
     }
-    return res.json({
+    return res.status(error.statusCode).json({
         statusCode: error.statusCode,
         url: `${req.method} ${req.url}`,
         message: error.message,
     });
 };
-

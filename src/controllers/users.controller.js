@@ -43,8 +43,22 @@ class UsersController {
     }
     update = async (req, res, next) => {
         const userId = req.params.uid;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         try {
             const data = req.body
+            if (data.name === null || data.last_name === null || data.email === null ||
+                data.password === null || data.photo === null || data.age === null || data.role === null ||
+                data.name === "" || data.last_name === "" || data.email === "" ||
+                data.password === "" || data.photo === "" || data.age === "" || data.photo === "") {
+                CustomError.new(errors.error);
+            }
+            if (data.email !== undefined && !emailRegex.test(data.email)) {
+                new CustomError(errors.emailRegex);
+            }
+            if (data.password !== undefined && data.password.length < 8) {
+                new CustomError(errors.password);
+            }
             const updatedUser = await this.service.update(userId, data);
             if (updatedUser) {
                 return res.success200(updatedUser);
@@ -88,4 +102,4 @@ class UsersController {
 export default UsersController;
 const controler = new UsersController();
 const { create, read, readOne, update, destroy, readByEmail } = controler
-export { create, read, readOne, update, destroy, readByEmail };
+export { create, read, readOne, update, destroy, readByEmail }; 

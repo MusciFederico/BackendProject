@@ -115,7 +115,7 @@ export default class CustomRouter {
                     if (
                         role === 0 && arrayOfPolicies.includes("USER") ||
                         role === 1 && arrayOfPolicies.includes("ADMIN") ||
-                        role === 2 && arrayOfPolicies.includes("PREMIUM")
+                        role === 2 && arrayOfPolicies.includes("PREM")
                     ) {
                         const user = await usersManager.readByEmail(email)
                         req.user = user

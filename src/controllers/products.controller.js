@@ -23,6 +23,7 @@ class ProductsController {
                 place,
                 price: numericPrice,
                 stock: numericStock,
+                owner: req.user._id
             };
 
             const createdProduct = await this.service.create(newProduct);
@@ -37,12 +38,37 @@ class ProductsController {
             const { filter, sort } = req.query;
             const filterObj = filter ? JSON.parse(filter) : {};
             const sortObj = sort ? JSON.parse(sort) : {};
-            const allProducts = await this.service.read({ filter: filterObj, sort: sortObj });
+            const allProducts = await this.service.read({ filterObj, sortObj });
 
             if (allProducts && allProducts.length > 0) {
                 res.success200(allProducts);
             } else {
                 CustomError.new(errors.notFound)
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+    readMe = async (req, res, next) => {
+        try {
+
+            const userId = req.user._id;
+
+            const { filter, sort } = req.query;
+            const paramsFilter = filter ? JSON.parse(filter) : {};
+
+            // Add the filter to match the owner with req.user._id
+            const ownerFilter = { owner: userId };
+            const filterObj = { ...paramsFilter, ...ownerFilter };
+
+            const sortObj = sort ? JSON.parse(sort) : {};
+
+            const allProducts = await this.service.read({ filterObj, sortObj });
+
+            if (allProducts && allProducts.length > 0) {
+                res.success200(allProducts);
+            } else {
+                CustomError.new(errors.notFound);
             }
         } catch (error) {
             next(error);
@@ -61,6 +87,10 @@ class ProductsController {
         try {
             const pid = req.params.pid;
             const data = req.body;
+            if (data.name === null || data.img === null || data.place === null || data.price === null || data.stock === null ||
+                data.name === "" || data.img === "" || data.place === "" || data.price === "" || data.stock === "") {
+                CustomError.new(errors.error);
+            }
             const response = await this.service.update(pid, data);
             return res.success200(response);
         } catch (error) {
@@ -75,7 +105,6 @@ class ProductsController {
                 res.success200(deleted);
             } else {
                 CustomError.new(errors.notFound)
-
             }
         } catch (error) {
             next(error);
@@ -85,5 +114,5 @@ class ProductsController {
 
 export default ProductsController;
 const controler = new ProductsController();
-const { create, read, readOne, update, destroy } = controler
-export { create, read, readOne, update, destroy };
+const { create, read, readOne, update, destroy, readMe } = controler
+export { create, read, readOne, update, destroy, readMe };

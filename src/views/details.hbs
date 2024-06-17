@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+    <style>
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .product-details {
+            text-align: center;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product-details h3 {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+
+        .product-details p {
+            margin: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            {{#if role0}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout" type="submit">Sign out</button></li>
+            {{/if}}
+            {{#if role1}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if role2}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/products/me">My products</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if roleUnd}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            <li><a href="/auth/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+
+    <h1>{{ name }}</h1>
+    <h2 style="display: none;" id="user_id">{{ user._id }}</h2>
+    <h3 style="display: none;" id="product_id">{{ cart._id }}</h3>
+
+    {{#if cart}}
+    <h2>Cart Details</h2>
+    <div class="product-details">
+        <div class="product-image">
+            <img src="{{ cart.img }}" alt="{{ cart.name }} Image">
+        </div>
+        <h3>{{ cart.name }}</h3>
+        <p>Price: ${{ cart.price }}</p>
+        <p>Stock: {{ cart.stock }}</p>
+        <p>Price: ${{ cart.price }}</p>
+        {{#if role0}}
+        <p>Quantity:</p>
+        <div>
+            <input type="number" id="quantityInput" name="quantity" min="1" value="1">
+            <button onclick="decrementQuantity()">-</button>
+            <button onclick="incrementQuantity()">+</button>
+        </div>
+        <button id="addToCart" type="submit">Add to Cart!</button>
+        {{/if}}
+        {{#if role2}}
+        {{#if productModifyingTrue}}
+        <div>
+            <form id="editProductForm">
+                <label for="productName">Name:</label>
+                <input type="text" id="productName" name="productName" value="{{ cart.name }}">
+
+                <label for="productPrice">Price:</label>
+                <input type="number" id="productPrice" name="productPrice" value="{{ cart.price }}" step="0.01">
+
+                <label for="productImg">Img:</label>
+                <input type="text" id="productImg" name="productImg" value="{{ cart.Img }}">
+
+                <label for="productStock">Stock:</label>
+                <input type="number" id="productStock" name="productStock" value="{{ cart.stock }}">
+
+                <button type="button" id="updateProduct">Update Product</button>
+            </form>
+            <button type="button" id="deleteProduct">Delete Product</button>
+        </div>
+        {{/if}}
+        {{#if productModifyingFalse}}
+        <p>Quantity:</p>
+        <div>
+            <input type="number" id="quantityInput" name="quantity" min="1" value="1">
+            <button onclick="decrementQuantity()">-</button>
+            <button onclick="incrementQuantity()">+</button>
+        </div>
+        <button id="addToCart" type="submit">Add to Cart!</button>
+        {{/if}}
+        {{/if}}
+        {{#if role1}}
+        <div>
+            <form id="editProductForm">
+                <label for="productName">Name:</label>
+                <input type="text" id="productName" name="productName" value="{{ cart.name }}">
+
+                <label for="productPrice">Price:</label>
+                <input type="number" id="productPrice" name="productPrice" value="{{ cart.price }}" step="0.01">
+
+                <label for="productImg">Img:</label>
+                <input type="text" id="productImg" name="productImg" value="{{ cart.Img }}">
+
+                <label for="productStock">Stock:</label>
+                <input type="number" id="productStock" name="productStock" value="{{ cart.stock }}">
+
+                <button type="button" id="updateProduct">Update Product</button>
+            </form>
+            <button type="button" id="deleteProduct">Delete Product</button>
+
+        </div>
+        {{/if}}
+    </div>
+    {{else}}
+    <p>No cart details available.</p>
+    {{/if}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script src="/scripts/sortAndFilter.js"></script>
+    <script src="/scripts/signout.js"></script>
+    <script src="/scripts/addtoCart.js"></script>
+    <script src="/scripts/adminProducts.js"></script>
+</body>
+
+</html>

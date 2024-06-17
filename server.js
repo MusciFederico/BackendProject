@@ -184,6 +184,7 @@ import { cpus } from 'os';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { serve, setup } from "swagger-ui-express";
 
+
 import env from "./src/utils/env.js"
 import dbConnection from './src/utils/db.js';
 import args from "./src/utils/args.js";
@@ -209,6 +210,10 @@ app.use("/api/docs", serve, setup(specs))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(compression({
+    brotli: { enabled: true, zlib: {} }
+}));
+
 logger.INFO(`environment: ${args.env}`);
 
 app.use(morgan('dev'));
@@ -230,6 +235,8 @@ const FileStore = sessionFileStore(expressSession);
 
 app.use(cookieParser(env.SECRET_KEY));
 
+const router = new IndexRouter();
+app.use(router.getRouter());
 // app.use(expressSession({
 //     secret: env.SECRET_KEY,
 //     resave: true,
@@ -252,6 +259,7 @@ app.use(cookieParser(env.SECRET_KEY));
 //             }),
 //     })
 // );
+
 app.use(expressSession({
     secret: env.SECRET_KEY,
     resave: true,
@@ -278,8 +286,7 @@ app.use(bodyParser.json());
 
 app.use(errorHandler);
 
-const router = new IndexRouter();
-app.use(router.getRouter());
+
 
 app.use(compression({ brotli: { enabled: true, zlib: {} } }));
 
@@ -325,22 +332,22 @@ async function sendProductsToClient(socket) {
     }
 }
 
-// logger.INFO(`clusterIsPrimary: ${cluster.isPrimary}`)
-// if (cluster.isPrimary) {
-//     const cpuCores = cpus().length;
-//     logger.INFO(`cpuCores: ${cpuCores}`)
-//     logger.INFO(`Primary Id: ${process.pid}`)
-//     for (let i = 1; i <= cpuCores; i++) { cluster.fork(); }
-// } else {
-//     server.listen(PORT, () => {
-//         logger.INFO(`Worker Id: ${process.pid}`)
-//         logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
-//         dbConnection();
-//     });
-// }
+logger.INFO(`clusterIsPrimary: ${cluster.isPrimary}`)
+if (cluster.isPrimary) {
+    const cpuCores = cpus().length;
+    logger.INFO(`cpuCores: ${cpuCores}`)
+    logger.INFO(`Primary Id: ${process.pid}`)
+    for (let i = 1; i <= cpuCores; i++) { cluster.fork(); }
+} else {
+    server.listen(PORT, () => {
+        logger.INFO(`Worker Id: ${process.pid}`)
+        logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
+        dbConnection();
+    });
+}
 
-server.listen(PORT, () => {
-    logger.INFO(`Worker Id: ${process.pid}`)
-    logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
-    dbConnection();
-});
+// server.listen(PORT, () => {
+//     logger.INFO(`Worker Id: ${process.pid}`)
+//     logger.INFO(`Servidor Express escuchando en el puerto ${PORT}`);
+//     dbConnection();
+// });

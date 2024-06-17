@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+    <style>
+        /* Estilos para el navbar */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            {{#if role0}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout" type="submit">Sign out</button></li>
+            {{/if}}
+            {{#if role1}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><button id="signout">Sign out</button></li>
+            <li><a href="/profile">Profile</a></li>
+            {{/if}}
+            {{#if role2}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/cart">cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/products/me">My products</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if roleUnd}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            <li><a href="/auth/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+
+    <h1>{{ name }}</h1>
+
+    {{#if orders.length}}
+    <ul>
+        {{#each orders}}
+        <li>
+            <h3>{{ this.product_id.name }}</h3>
+            <img src="{{ this.product_id.img }}" alt="{{ this.product_id.name }} Image">
+            <p id="p">Price: ${{ this.product_id.price }}</p>
+            <p id="quantity_{{ this._id }}">Quantity: {{ this.quantity }}</p>
+            <button class="addItem" id="add_{{ this._id }}">add Item</button>
+            <button class="removeItem" id="remove_{{ this._id }}">Remove Item</button>
+        </li>
+        {{/each}}
+    </ul>
+    <!-- Buy button only appears if there are orders in the cart -->
+    <button id="buyButton">Buy Now</button>
+    {{else}}
+    <p>No orders in cart.</p>
+    {{/if}}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script src="/scripts/sortAndFilter.js"></script>
+    <script src="/scripts/cart.js"></script>
+    <script src="/scripts/signout.js"></script>
+</body>
+
+</html>

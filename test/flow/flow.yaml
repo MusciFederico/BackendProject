@@ -1,19 +1,29 @@
 config:
   plugins:
     metrics-by-endpoint: {}
-  target: http://localhost:8080/test
+  target: 'http://localhost:8080'
   phases:
-    - duration: 10
-      arrivalRate: 50
+    - duration: 30
+      arrivalRate: 20
+
 scenarios:
-  - name: login, create, read, destroy & signout
+  - name: login
     flow:
-      - log: login
       - post:
-          url: /auth/login
+          url: /sessions/login
           json: 
             email: ADMIN10@admin.com
             password: hola1234
-      - log: signout
+          capture:
+            - json: $
+              as: json
+      - post:
+          url: /sessions
+          headers:
+            Authorization: 'Bearer {{ json.response.token }}'
+      - get:
+          url: /api/products
       - post: 
-          url: /auth/signout
+          url: /sessions/signout
+          headers:
+            Authorization: 'Bearer {{ json.response.token }}'

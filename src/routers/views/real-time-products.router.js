@@ -49,20 +49,28 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     const role0 = 'role0';
     const role1 = 'role1';
+    const role2 = 'role2';
     const roleUnd = 'roleUnd';
+
 
     try {
         let role;
+        let email;
+
+
         if (req.cookies.token) {
-            const token = req.cookies
+            const token = req.cookies.token;
             const data = verifytoken(token);
-            role = data.role
+            role = data.role;
+            email = data.email; // Assuming the token contains userId
         }
 
         if (role === 0) {
             role = role0;
         } else if (role === 1) {
             role = role1;
+        } else if (role === 2) {
+            role = role2;
         } else {
             role = roleUnd;
         }

@@ -66,7 +66,7 @@ class ProductsService {
     }
     read = async ({ filterObj, sortObj }) => {
         try {
-            const response = await this.productsRep.read({ filter: filterObj, sort: sortObj });
+            const response = await this.productsRep.read({ filterObj, sortObj });
             return response
         } catch (error) {
             throw error;

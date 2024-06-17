@@ -92,10 +92,12 @@ class SessionsController {
         this.service = usersService;
     }
     register = async (req, res, next) => {
-        const { email, name } = req.body;
-        await this.service.register({ email, name })
         try {
-            return res.success200("Registered!");
+            if (req.user) {
+                return res.success200("Registered!");
+            } else {
+                res.error401()
+            }
         } catch (error) {
             return next(error);
         }
@@ -106,7 +108,10 @@ class SessionsController {
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 // httpOnly: true,
             });
-            return res.success200("Logged in!");
+            return res.success200({
+                message: "Logged in!",
+                token: req.token,
+            });
 
         } catch (error) {
             return next(error);

@@ -1,20 +1,21 @@
 import passport from "passport";
 
 export default (strategy) => {
-    return async (req, res, next) => {
-        passport.authenticate(strategy, (error, user, info) => {
+    return (req, res, next) => {
+        passport.authenticate(strategy, (error, user, info = {}) => {
             if (error) {
                 return next(error);
             }
             if (!user) {
-                return res.json({
-                    statusCode: info.statusCode || 401,
-                    message: info.messages || info.toString(),
+                const { statusCode = 401, message } = info;
+                const errorMessage = typeof message === "string" ? message : JSON.stringify(message) || info.toString();
+                return res.status(statusCode).json({
+                    statusCode,
+                    message: errorMessage,
                 });
             }
             req.user = user;
             return next();
-            // yes
         })(req, res, next);
     };
 };

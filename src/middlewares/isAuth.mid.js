@@ -1,14 +1,17 @@
 import { verifytoken } from "../utils/token.js"
+import CustomError from "../utils/customError.js";
+import errors from "../utils/errorLibrary.js";
 export default (req, res, next) => {
     try {
-        const token = req.cookies.token;
-        const userData = verifytoken(token)
+        let userData
+        if (req.cookies.token) {
+            const token = req.cookies.token;
+            userData = verifytoken(token)
+        }
         if (userData) {
-            return next()
+            CustomError.new(errors.forbidden)
         } else {
-            const error = new Error("Bad auth from middleware");
-            error.statusCode = 401;
-            throw error
+            return next()
         }
     } catch (error) {
         return next(error)

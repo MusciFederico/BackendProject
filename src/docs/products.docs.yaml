@@ -1,0 +1,493 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the product
+        img:
+          type: string
+          description: Image URL of the product
+        place:
+          type: string
+          description: Place of origin of the product
+        price:
+          type: number
+          description: Price of the product
+        stock:
+          type: number
+          description: Stock quantity of the product
+        _id:
+          type: string
+          description: Unique identifier of the product
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the product was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date and time when the product was last updated
+        __v:
+          type: integer
+          description: Version number of the product document in the database
+      example:
+        name: remera
+        img: https://example.com/image.jpg
+        place: lugar de origen
+        price: 10
+        stock: 50
+        _id: 666a0f662a87856961e2c807
+        createdAt: '2024-06-12T21:13:10.544Z'
+        updatedAt: '2024-06-12T21:13:10.544Z'
+        __v: 0
+
+  responses:
+    CreateProductResponses:
+      res201:
+        description: Successful creation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              name: remera
+              img: https://example.com/image.jpg
+              place: Lugar de origen
+              price: 10
+              stock: 50
+              _id: 666a0f662a87856961e2c807
+              createdAt: '2024-06-12T21:13:10.544Z'
+              updatedAt: '2024-06-12T21:13:10.544Z'
+              __v: 0
+
+      res400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: POST /api/products
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 400
+              url: POST /api/products
+              message: Error
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: POST /api/products
+                message:
+                  type: string
+                  description: Internal server error
+            example:
+              statusCode: 500
+              url: POST /api/products
+              message: Internal server error
+
+    ReadOneProductResponses:
+      res200:
+        description: Successful retrieval
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              name: remera
+              img: https://example.com/image.jpg
+              place: Lugar de origen
+              price: 10
+              stock: 50
+              _id: 666a0f662a87856961e2c807
+              createdAt: '2024-06-12T21:13:10.544Z'
+              updatedAt: '2024-06-12T21:13:10.544Z'
+              __v: 0
+
+      res404:
+        description: Product not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: GET /api/products/{productId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: GET /api/products/65f990443e441923683956b8
+              message: Not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/products/{productId}
+                message:
+                  type: string
+                  description: Internal server error
+            example:
+              statusCode: 500
+              url: "GET /api/products/665a21cd26d7a759b291763"
+              message: "Cast to ObjectId failed for value \"665a21cd26d7a759b291763\" (type string) at path \"_id\" for model \"products\""
+
+    ReadProductResponses:
+      res200:
+        description: Successful retrieval
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+            example:
+              - _id: 65cbaea10adc56c30e972bfd
+                name: Producto 1
+                photo: https://mexx-img-2019.s3.amazonaws.com/Celular-Samsung-Galaxy-A14-128Mb-Verde_45840_1.jpeg
+                price: 20.99
+                stock: 50
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/products
+                message:
+                  type: string
+                  description: Internal server error
+            example:
+              statusCode: 500
+              url: "GET /api/products/665a21cd26d7a759b291763"
+              message: Internal server error occurred while processing the request.
+
+    UpdateProductResponses:
+      res200:
+        description: Successful retrieval
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              name: remera
+              img: https://example.com/image.jpg
+              place: Lugar de origen
+              price: 10
+              stock: 50
+              _id: 666a0f662a87856961e2c807
+              createdAt: '2024-06-12T21:13:10.544Z'
+              updatedAt: '2024-06-12T21:13:10.544Z'
+              __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res400:
+        description: Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: 
+                  type: number  
+                  description: Error 
+                url:  
+                  type: string  
+                  description: PUT /api/products/  
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              statusCode: 400
+              url: "PUT /api/producs/666fa4c4c424c794030fa57a"
+              message: "Error"
+
+      res404:
+        description: Product not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: PUT /api/products/{productId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: PUT /api/products/65f990443e441923683956b8
+              message: Not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/products/{productId}
+                message:
+                  type: string
+                  description: Internal server error
+            example:
+              statusCode: 500
+              url: "GET /api/products/665a21cd26d7a759b291763"
+              message: "Cast to ObjectId failed for value \"665a21cd26d7a759b291763\" (type string) at path \"_id\" for model \"products\""
+
+    DestroyProductResponses:
+      res200:
+        description: Successful retrieval
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            example:
+              name: remera
+              img: https://example.com/image.jpg
+              place: Lugar de origen
+              price: 10
+              stock: 50
+              _id: 666a0f662a87856961e2c807
+              createdAt: '2024-06-12T21:13:10.544Z'
+              updatedAt: '2024-06-12T21:13:10.544Z'
+              __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res404:
+        description: Product not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: DELETE /api/products/{productId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: DELETE /api/products/65f990443e441923683956b8
+              message: Not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/products/{productId}
+                message:
+                  type: string
+                  description: Internal server error
+            example:
+              statusCode: 500
+              url: "GET /api/products/665a21cd26d7a759b291763"
+              message: "Cast to ObjectId failed for value \"665a21cd26d7a759b291763\" (type string) at path \"_id\" for model \"products\""
+
+paths:
+  /api/products:
+    post:
+      summary: Create a product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        description: Data of the product to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateProductResponses/res201'
+        '400':
+          $ref: '#/components/responses/CreateProductResponses/res400'
+        '401':
+          $ref: '#/components/responses/CreateProductResponses/res401'
+        '500':
+          $ref: '#/components/responses/CreateProductResponses/res500'
+
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadProductResponses/res200'
+        '500':
+          $ref: '#/components/responses/ReadProductResponses/res500'
+
+  /api/products/{productId}:
+    get:
+      summary: Get a product by ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of the product to retrieve
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadOneProductResponses/res200'
+        '404':
+          $ref: '#/components/responses/ReadOneProductResponses/res404'
+        '500':
+          $ref: '#/components/responses/ReadOneProductResponses/res500'
+
+    put:
+      summary: Update a product by ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of the product to update
+      requestBody:
+        required: true
+        description: New data of the product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProductResponses/res200'
+        '401':
+          $ref: '#/components/responses/UpdateProductResponses/res401'
+        '400':
+          $ref: '#/components/responses/UpdateProductResponses/res400'
+        '404':
+          $ref: '#/components/responses/UpdateProductResponses/res404'
+        '500':
+          $ref: '#/components/responses/UpdateProductResponses/res500'
+
+    delete:
+      summary: Delete a product by ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+          description: ID of the product to delete
+      responses:
+        '200':
+          $ref: '#/components/responses/DestroyProductResponses/res200'
+        '401':
+          $ref: '#/components/responses/DestroyProductResponses/res401'
+        '404':
+          $ref: '#/components/responses/DestroyProductResponses/res404'
+        '500':
+          $ref: '#/components/responses/DestroyProductResponses/res500'
+
+

@@ -71,6 +71,12 @@
             color: #fff;
             text-decoration: none;
         }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -79,11 +85,23 @@
         <ul>
             {{#if role0}}
             <li><a href="/">Home</a></li>
-            <li><a href="/orders">Orders</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout" type="submit">Sign out</button></li>
             {{/if}}
             {{#if role1}}
             <li><a href="/">Home</a></li>
             <li><a href="/products/form">Form</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if role2}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/cart">cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/products/me">My products</a></li>
+            <li><button id="signout">Sign out</button></li>
             {{/if}}
             {{#if roleUnd}}
             <li><a href="/">Home</a></li>

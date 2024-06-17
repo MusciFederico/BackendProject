@@ -1,0 +1,686 @@
+openapi: 3.0.0
+info:
+  title: Orders API
+  version: 1.0.0
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: ID of the user who placed the order
+        product_id:
+          type: string
+          description: ID of the product ordered
+        quantity:
+          type: integer
+          description: Quantity of the product ordered
+          default: 1
+        state:
+          type: string
+          description: Current state of the order
+          enum: [reserved, payed, delivered]
+          default: reserved
+      example:
+        user_id: "65dbe4dcc8846a73e394f45f"
+        product_id: "b1b4162c5d47fd6b65993f2e"
+        quantity: 2
+        state: "reserved"
+        _id: "607f1f77bcf86cd799439011"
+        createdAt: "2021-05-17T20:23:42.789Z"
+        updatedAt: "2021-05-17T20:23:42.789Z"
+        __v: 0
+
+  responses:
+    CreateOrderResponses:
+      res201:
+        description: Successful creation of an order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            example:
+              user_id: "65dbe4dcc8846a73e394f45f"
+              product_id: "b1b4162c5d47fd6b65993f2e"
+              quantity: 2
+              state: "reserved"
+              _id: "607f1f77bcf86cd799439011"
+              createdAt: "2021-05-17T20:23:42.789Z"
+              updatedAt: "2021-05-17T20:23:42.789Z"
+              __v: 0
+
+      res400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Error message indicating the cause of the bad request
+              example:
+                message: "Unexpected token 'd', ...\"uantity\": dasdasd}\" is not valid JSON"
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Forbidden
+            example:
+              message: Forbidden
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  example: 500
+                url:
+                  type: string
+                  example: POST /api/orders
+                message:
+                  type: string
+                  example: "Internal Server Error"
+
+    ReadOneOrderResponses:
+      res200:
+        description: Successful retrieval of an order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            example:
+              user_id: "65dbe4dcc8846a73e394f45f"
+              product_id: "b1b4162c5d47fd6b65993f2e"
+              quantity: 2
+              state: "reserved"
+              _id: "607f1f77bcf86cd799439011"
+              createdAt: "2021-05-17T20:23:42.789Z"
+              updatedAt: "2021-05-17T20:23:42.789Z"
+              __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Forbidden
+            example:
+              message: Forbidden
+
+      res404:
+        description: Order not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: GET /api/orders/{orderId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: GET /api/orders/607f1f77bcf86cd799439011
+              message: Order not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/orders/{orderId}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "GET /api/orders/65cbe3ef8c0695f15c2c90c"
+                message: "Cast to ObjectId failed for value \"65cbe3ef8c0695f15c2c90c\" (type string) at path \"_id\" for model \"orders\""
+
+    UpdateOrderResponses:
+      res200:
+        description: Successful update of an order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            example:
+              user_id: "65dbe4dcc8846a73e394f45f"
+              product_id: "b1b4162c5d47fd6b65993f2e"
+              quantity: 3
+              state: "payed"
+              _id: "607f1f77bcf86cd799439011"
+              createdAt: "2021-05-17T20:23:42.789Z"
+              updatedAt: "2021-05-17T21:00:00.000Z"
+              __v: 0
+
+      res400:
+        description: Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: 
+                  type: number  
+                  description: Error 
+                url:  
+                  type: string  
+                  description: PUT /api/orders/  
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              statusCode: 400
+              url: "PUT /api/orders/666fa4c4c424c794030fa57a"
+              message: "Error"
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Forbidden
+            example:
+              message: Forbidden
+
+      res404:
+        description: Order not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: PUT /api/orders/{orderId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: PUT /api/orders/607f1f77bcf86cd799439011
+              message: Order not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: PUT /api/orders/{orderId}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "PUT /api/orders/65d7b5322053117550e3b69"
+                message: "Cast to ObjectId failed for value \"65d7b5322053117550e3b69\" (type string) at path \"_id\" for model \"orders\""
+
+    DeleteOrderResponses:
+      res200:
+        description: Successful deletion of an order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            example:
+              user_id: "65dbe4dcc8846a73e394f45f"
+              product_id: "b1b4162c5d47fd6b65993f2e"
+              quantity: 2
+              state: "reserved"
+              _id: "607f1f77bcf86cd799439011"
+              createdAt: "2021-05-17T20:23:42.789Z"
+              updatedAt: "2021-05-17T20:23:42.789Z"
+              __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Forbidden
+            example:
+              message: Forbidden
+
+      res404:
+        description: Order not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: DELETE /api/orders/{orderId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: DELETE /api/orders/607f1f77bcf86cd799439011
+              message: Order not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: DELETE /api/orders/{orderId}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "DELETE /api/orders/607f1f77bcf86cd799439011"
+                message: "Internal server error occurred while processing the request."
+
+    ReadTotalOrdersResponses:
+      res200:
+        description: Successful retrieval of total orders for a user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode: 
+                  type: number
+                  description: Success Code
+                totalOrders:
+                  type: number
+                  description: Total value in dollars of the orders for the user
+              example:
+                statusCode: 200
+                totalOrders: 209
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Forbidden
+            example:
+              message: Forbidden
+
+      res404:
+        description: User not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error code
+                url:
+                  type: string
+                  description: GET /api/orders/total/{userId}
+                message:
+                  type: string
+                  description: Error message
+            example:
+              statusCode: 404
+              url: GET /api/orders/total/65f9e4289bbfd9df8aeaea3f
+              message: Not found
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/orders/total/{userId}
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "GET /api/orders/total/65d9346f67d6da7a8d58675"
+                message: "Cast to ObjectId failed for value \"65d9346f67d6da7a8d58675\" (type string) at path \"user_id\" for model \"orders\""
+
+    ReadOrdersResponses:
+      res200:
+        description: Successful retrieval of all orders
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Order'
+            example:
+              - user_id: "65dbe4dcc8846a73e394f45f"
+                product_id: "b1b4162c5d47fd6b65993f2e"
+                quantity: 2
+                state: "reserved"
+                _id: "607f1f77bcf86cd799439011"
+                createdAt: "2021-05-17T20:23:42.789Z"
+                updatedAt: "2021-05-17T20:23:42.789Z"
+                __v: 0
+              - user_id: "65dbe4dcc8846a73e394f45f"
+                product_id: "e3b4162c5d47fd6b65993f3f"
+                quantity: 1
+                state: "payed"
+                _id: "607f1f77bcf86cd799439012"
+                createdAt: "2021-05-18T14:00:00.789Z"
+                updatedAt: "2021-05-18T14:00:00.789Z"
+                __v: 0
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Unauthorized
+            example:
+              message: Unauthorized
+
+      res403:
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Forbidden
+            example:
+              message: Forbidden
+
+      res500:
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                url:
+                  type: string
+                  description: GET /api/orders
+                message:
+                  type: string
+                  description: Internal server error
+              example:
+                statusCode: 500
+                url: "GET /api/orders"
+                message: "Internal server error occurred while processing the request."
+
+paths:
+  /api/orders:
+    post:
+      summary: Create a new order
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        description: Data of the order to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateOrderResponses/res201'
+        '400':
+          $ref: '#/components/responses/CreateOrderResponses/res400'
+        '401':
+          $ref: '#/components/responses/CreateOrderResponses/res401'
+        '403':
+          $ref: '#/components/responses/CreateOrderResponses/res403'
+        '500':
+          $ref: '#/components/responses/CreateOrderResponses/res500'
+
+    get:
+      summary: Retrieve all orders
+      tags:
+        - Orders
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadOrdersResponses/res200'
+        '401':
+          $ref: '#/components/responses/ReadOrdersResponses/res401'
+        '403':
+          $ref: '#/components/responses/ReadOrdersResponses/res403'
+        '500':
+          $ref: '#/components/responses/ReadOrdersResponses/res500'
+
+  /api/orders/{orderId}:
+    get:
+      summary: Retrieve an order by ID
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+          description: ID of the order to retrieve
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadOneOrderResponses/res200'
+        '401':
+          $ref: '#/components/responses/ReadOneOrderResponses/res401'
+        '403':
+          $ref: '#/components/responses/ReadOneOrderResponses/res403'
+        '404':
+          $ref: '#/components/responses/ReadOneOrderResponses/res404'
+        '500':
+          $ref: '#/components/responses/ReadOneOrderResponses/res500'
+
+    put:
+      summary: Update an order by ID
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+          description: ID of the order to update
+      requestBody:
+        required: true
+        description: New data of the order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateOrderResponses/res200'
+        '400':
+          $ref: '#/components/responses/UpdateOrderResponses/res400'
+        '401':
+          $ref: '#/components/responses/UpdateOrderResponses/res401'
+        '403':
+          $ref: '#/components/responses/UpdateOrderResponses/res403'
+        '404':
+          $ref: '#/components/responses/UpdateOrderResponses/res404'
+        '500':
+          $ref: '#/components/responses/UpdateOrderResponses/res500'
+
+    delete:
+      summary: Delete an order by ID
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+          description: ID of the order to delete
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteOrderResponses/res200'
+        '401':
+          $ref: '#/components/responses/DeleteOrderResponses/res401'
+        '403':
+          $ref: '#/components/responses/DeleteOrderResponses/res403'
+        '404':
+          $ref: '#/components/responses/DeleteOrderResponses/res404'
+        '500':
+          $ref: '#/components/responses/DeleteOrderResponses/res500'
+
+  /api/orders/total/{userId}:
+    get:
+      summary: Retrieve total orders value for a user by ID
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to retrieve total orders value
+      responses:
+        '200':
+          $ref: '#/components/responses/ReadTotalOrdersResponses/res200'
+        '401':
+          $ref: '#/components/responses/ReadTotalOrdersResponses/res401'
+        '403':
+          $ref: '#/components/responses/ReadTotalOrdersResponses/res403'
+        '404':
+          $ref: '#/components/responses/ReadTotalOrdersResponses/res404'
+        '500':
+          $ref: '#/components/responses/ReadTotalOrdersResponses/res500'

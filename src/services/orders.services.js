@@ -110,6 +110,14 @@ class OrdersService {
             throw error;
         }
     }
+    readOrdersById = async (uId) => {
+        try {
+            const response = await this.ordersRep.readOrdersById(uId);
+            return response
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 const ordersService = new OrdersService();

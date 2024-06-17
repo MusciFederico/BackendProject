@@ -119,7 +119,7 @@
 
 import env from "../utils/env.js"
 import passport from "passport"
-import usersRep from "../repositories/users.rep.js";
+import usersService from "../services/users.services.js";
 import { Strategy as LocalStrategy } from "passport-local"
 import { createHash, verifyHash } from "../utils/hash.js"
 import { Strategy as GoogleStrategy } from "passport-google-oauth2"
@@ -131,44 +131,56 @@ passport.use("register", new LocalStrategy(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, password, done) => {
         try {
-            let one = await usersRep.readByEmail(email);
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return done(null, false, { messages: "invalid email format", statusCode: 422 })
+            }
+            let one = await usersService.readByEmail(email);
             if (one) {
                 return done(null, false, { messages: "Already exists", statusCode: 409 })
-            } else {
-                let data = await req.body
-                data.password = createHash(password);
-                let user = await usersRep.create(data);
-                return done(null, user);
             }
+            if (password.length < 8) {
+                return done(null, false, { messages: "Password should be at least 8 characters long", statusCode: 400 })
+            }
+            let data = await req.body
+            let user = await usersService.create(data);
+            return done(null, user);
         } catch (error) {
             return done(error)
         }
     }
 ))
 
+
 passport.use("login", new LocalStrategy(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, password, done) => {
         try {
-            const user = await usersRep.readByEmail(email)
-            if (user) {
-                const verify = verifyHash(password, user.password)
-                // const verify = true
-                if (verify) {
-                    const token = createToken({ email, role: user.role });
-                    req.token = token;
-                    return done(null, user,);
-                } else {
-                    return done(null, false, { messages: "Bad auth from passport cb" });
-                }
-            } else {
-                return done(null, false)
+            const user = await usersService.readByEmail(email);
+
+            const errorMessage = { message: "Invalid credentials", statusCode: 401 };
+
+            if (!user) {
+                return done(null, false, errorMessage);
             }
+
+            const verify = verifyHash(password, user.password);
+            if (!verify) {
+                return done(null, false, errorMessage);
+            }
+
+            const token = createToken({ email, role: user.role });
+            req.token = token;
+            req.user = user;
+            return done(null, user);
+
         } catch (error) {
-            return done(error)
+            return done(error);
         }
     }
 ));
+
+
 
 passport.use(
     "google",
@@ -181,7 +193,7 @@ passport.use(
         },
         async (req, accessToken, refreshToken, profile, done) => {
             try {
-                let user = await usersRep.readByEmail(profile.id)
+                let user = await usersService.readByEmail(profile.id)
                 if (user) {
                     req.session.email = user.email
                     req.session.role = user.role
@@ -194,7 +206,7 @@ passport.use(
                         photo: profile.coverPhoto,
                         password: createHash(profile.id),
                     }
-                    user = await usersRep.create(user)
+                    user = await usersService.create(user)
                     req.session.email = user.email
                     req.session.role = user.role
                     return done(null, user)
@@ -212,7 +224,7 @@ passport.use(
         secretOrKey: env.SECRET
     }, async (payload, done) => {
         try {
-            const user = await usersRep.readByEmail(payload.email);
+            const user = await usersService.readByEmail(payload.email);
             if (user) {
                 user.password = null;
                 return done(null, user);

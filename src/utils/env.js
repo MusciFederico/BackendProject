@@ -29,4 +29,5 @@ export default {
 
     TWILIO_PHONE: process.env.TWILIO_PHONE,
 
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
 }

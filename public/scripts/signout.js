@@ -1,4 +1,5 @@
-document.querySelector("#signout").addEventListener("click", async () => {
+document.querySelector("#signout").addEventListener("click", async (event) => {
+    event.preventDefault();
     try {
         const token = localStorage.getItem("token")
         const opts = {
@@ -7,12 +8,13 @@ document.querySelector("#signout").addEventListener("click", async () => {
         }
         let response = await fetch("/sessions/signout", opts)
         response = await response.json()
-        if (response.statusCode === 200) {
-            alert(response.message);
-            localStorage.removeItem("token");
-            location.replace("/");
-        }
+
+        response.statusCode === 200 ?
+            (alert("Signed out successfully"), localStorage.removeItem("token"), location.replace("/")) :
+            alert("Sign out failed");
+
     } catch (error) {
-        alert(error.message)
+        alert("An unexpected error occurred");
     }
-})
+});
+

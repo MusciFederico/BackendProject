@@ -1,0 +1,312 @@
+components:
+  schemas:
+    Sessions:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of user
+        email:
+          type: string
+          description: Email of user
+        password:
+          type: string
+          description: Password of user, must be 8 characters
+        role:
+          type: number
+          description: Role of user, 0 by default (register from frontend can't choose role)
+      example:
+        name: John Smith
+        email: myemail@gmail.com
+        password: hola1234
+
+  responses:
+    RegisterResponses:
+      res200:
+        description: Successful Code
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Successful Code
+                response:
+                  type: string
+                  description: Registered!
+              example:
+                statusCode: 200
+                response: Registered!
+
+      res400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 400
+                error: Password must be at least 8 characters long
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 401
+                error: Data in request body is incomplete
+
+      res409:
+        description: Conflict
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 409
+                error: Already exists
+
+      res422:
+        description: Unprocessable Entity
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 422
+                error: Invalid email format
+
+    LoginResponses:
+      res200:
+        description: Successful login
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Message indicating successful login
+                token:
+                  type: string
+                  description: JWT token for authentication
+              example:
+                message: Logged in!
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 401
+                error: Invalid credentials
+
+    ProfileResponses:
+      res200:
+        description: Successful retrieval of user profile
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 401
+                error: Unauthorized
+
+    SignoutResponses:
+      res200:
+        description: Successful sign out
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: Message indicating successful sign out
+              example:
+                message: Signed out!
+
+      res401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                statusCode:
+                  type: number
+                  description: Error Code
+                error:
+                  type: string
+                  description: Description of the error
+              example:
+                statusCode: 401
+                error: Unauthorized
+
+paths:
+  /sessions/register:
+    post:
+      summary: To register a user
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        description: Data of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sessions'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/RegisterResponses/res201'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/RegisterResponses/res400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/RegisterResponses/res401'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/RegisterResponses/res409'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/RegisterResponses/res422'
+
+  /sessions/login:
+    post:
+      summary: To login a user
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        description: Data of the user for login
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sessions'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/LoginResponses/res200'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/LoginResponses/res401'
+
+  /sessions/:
+    post:
+      summary: Retrieve user profile
+      tags:
+        - Sessions
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ProfileResponses/res200'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ProfileResponses/res401'
+
+  /sessions/signout:
+    post:
+      summary: Sign out a user
+      tags:
+        - Sessions
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/SignoutResponses/res200'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/SignoutResponses/res401'

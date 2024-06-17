@@ -1,145 +1,3 @@
-// import User from "./models/user.model.js";
-// import Product from "./models/product.model.js";
-// import Order from "./models/order.model.js";
-
-// class MongoManager {
-//     constructor(model) {
-//         this.model = model;
-//     }
-
-//     async create(data) {
-//         try {
-//             const one = await this.model.create(data);
-//             return one;
-//         } catch (error) {
-//             throw error;
-//         }
-//     }
-
-//     async read(obj) {
-//         try {
-//             let query = {};
-
-//             if (obj && obj.filter) {
-//                 query = obj.filter;
-//             }
-
-//             let sortQuery = {};
-
-//             if (obj && obj.sort) {
-//                 sortQuery = obj.sort;
-//             }
-
-//             const all = await this.model.find(query).sort(sortQuery);
-
-//             if (all.length === 0) {
-//                 const error = new Error("There aren't products");
-//                 error.statusCode = 404;
-//                 throw error;
-//             }
-//             return all;
-//         } catch (error) {
-//             throw error;
-//         }
-//     }
-
-//     async readOne(id) {
-//         try {
-//             const one = await this.model.findById(id);
-//             if (!one) {
-//                 const error = new Error("There isn't product");
-//                 error.statusCode = 404;
-//                 throw error;
-//             }
-//             return one;
-//         } catch (error) {
-//             throw error;
-//         }
-//     }
-
-//     async readByEmail(email) {
-//         try {
-//             const user = await this.model.findOne({ email });
-//             // if (!user) {
-//             //     const error = new Error(`User with email ${email} not found`);
-//             //     error.statusCode = 404;
-//             //     throw error;
-//             // }
-
-//             return user;
-//         } catch (error) {
-//             throw error;
-//         }
-//     }
-
-//     async update(id, data) {
-//         try {
-//             const opt = { new: true };
-//             const one = await this.model.findByIdAndUpdate(id, data, opt);
-//             if (!one) {
-//                 const error = new Error("There isn't product");
-//                 error.statusCode = 404;
-//                 throw error;
-//             }
-//             return one;
-//         } catch (error) {
-//             throw error;
-//         }
-//     }
-
-//     async destroy(id) {
-//         try {
-//             const one = await this.model.findByIdAndDelete(id);
-//             if (!one) {
-//                 const error = new Error("There isn't product");
-//                 error.statusCode = 404;
-//                 throw error;
-//             }
-//             return one;
-//         } catch (error) {
-//             throw error;
-//         }
-//     }
-
-//     async report(uid) {
-//         try {
-//             const orders = await Order.find({ user_id: uid });
-
-//             if (orders.length === 0) {
-//                 return "El usuario no tiene órdenes.";
-//             }
-
-//             let totalCost = 0;
-
-//             for (const order of orders) {
-//                 totalCost += order.product_id.price * order.quantity;
-//             }
-
-//             return totalCost;
-//         } catch (error) {
-//             console.error("Error al calcular el costo total:", error);
-//             throw error;
-//         }
-//     }
-
-//     async readOrdersById(uid) {
-//         try {
-//             const orders = await Order.find({ user_id: uid });
-//             console.log("orders manager:", orders);
-//             if (orders.length === 0) {
-//                 return "El usuario no tiene órdenes.";
-//             }
-//             return orders;
-//         } catch (error) {
-//             console.error("Error al buscar ordenes del usuario:", error);
-//             throw error;
-//         }
-//     }
-// }
-
-
-
-// export default MongoManager
 import User from "./models/user.model.js";
 import Product from "./models/product.model.js";
 import Order from "./models/order.model.js";
@@ -161,29 +19,33 @@ class MongoManager {
         }
     }
 
-    async read(obj) {
+    async read({ filterObj, sortObj }) {
         try {
+            console.log("mongo", filterObj, sortObj);
+            // Initialize query and sortQuery objects
             let query = {};
-
-            if (obj && obj.filter) {
-                query = obj.filter;
-            }
-
             let sortQuery = {};
 
-            if (obj && obj.sort) {
-                sortQuery = obj.sort;
+            // Check if filterObj is defined and not empty
+            if (filterObj && Object.keys(filterObj).length > 0) {
+                query = filterObj;
             }
 
+            // Check if sortObj is defined and not empty
+            if (sortObj && Object.keys(sortObj).length > 0) {
+                sortQuery = sortObj;
+            }
+
+            // Perform the query using model.find() with the filter and sort criteria
             const all = await this.model.find(query).sort(sortQuery);
 
             if (all.length === 0) {
-                CustomError.new(errors.notFound)
-
+                CustomError.new(errors.notFound); // Throw an error if no results are found
             }
-            return all;
+
+            return all; // Return the query results
         } catch (error) {
-            throw error;
+            throw error; // Throw any encountered errors back to the caller
         }
     }
 
@@ -250,6 +112,7 @@ class MongoManager {
             let totalCost = 0;
 
             for (const order of orders) {
+                if (!order.product_id) { continue }
                 totalCost += order.product_id.price * order.quantity;
             }
 
@@ -263,13 +126,30 @@ class MongoManager {
     async readOrdersById(uid) {
         try {
             const orders = await Order.find({ user_id: uid });
-            logger.WARN("orders manager:", orders);
+            logger.INFO("orders manage, Orders:", orders);
+
             if (orders.length === 0) {
                 return "El usuario no tiene órdenes.";
             }
-            return orders;
+
+            const ordersWithSummedQuantities = {};
+            for (const order of orders) {
+                if (!order.product_id) { continue }
+                const productId = order.product_id._id.toString();
+
+                if (ordersWithSummedQuantities[productId]) {
+                    ordersWithSummedQuantities[productId].quantity += order.quantity;
+                } else {
+                    ordersWithSummedQuantities[productId] = {
+                        ...order._doc,
+                        quantity: order.quantity
+                    };
+                }
+            }
+
+            return Object.values(ordersWithSummedQuantities);
         } catch (error) {
-            logger.WARN("Error al buscar ordenes del usuario:", error);
+            logger.ERROR("Error al buscar ordenes del usuario:", error);
             throw error;
         }
     }
@@ -278,5 +158,3 @@ class MongoManager {
 
 
 export default MongoManager
-
-

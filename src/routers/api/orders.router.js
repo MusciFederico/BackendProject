@@ -1,21 +1,22 @@
 import CustomRouter from '../CustomRouter.js';
-import path from 'path';
-import { report, create, read, readOne, update, destroy } from '../../controllers/orders.controller.js'
+import { report, create, read, readOne, update, destroy, readOrdersById } from '../../controllers/orders.controller.js'
+import authorizeRoles from '../../middlewares/authorize.mid.js';
 
 class OrdersRouter extends CustomRouter {
     init() {
-        this.read('/', ["USER", "PREMIUM"], read);
+        this.read('/', ["ADMIN"], read);
 
-        this.create('/', ["USER", "PREMIUM"], create);
+        this.create('/', ["USER", "PREM"], authorizeRoles({ idParam: 'user_id', idSource: 'body' }), create);
 
-        this.read('/:oid', ["PUBLIC"], readOne);
+        this.read('/:oid', ["USER", "PREM"], authorizeRoles({ idParam: 'oid', idSource: 'params', checkOrder: true }), readOne);
 
-        this.update('/:oid', ["USER", "PREMIUM"], update); //problemas con error forbiden
+        this.update('/:oid', ["USER", "PREM"], authorizeRoles({ idParam: 'oid', idSource: 'params', checkOrder: true }), update);
 
-        this.destroy('/:oid', ["USER", "PREMIUM"], destroy);
+        this.destroy('/:oid', ["USER", "PREM"], authorizeRoles({ idParam: 'oid', idSource: 'params', checkOrder: true }), destroy);
 
-        this.read('/total/:uid', ["ADMIN"], report);
+        this.read('/total/:uid', ["USER", "PREM"], authorizeRoles({ idSource: 'params' }), report);
 
+        this.read('/cart/:uid', ["USER", "PREM"], authorizeRoles({ idSource: 'params' }), readOrdersById);
     }
 };
 

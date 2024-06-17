@@ -1,3 +1,4 @@
+{{!--
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ name }}</title>
     <style>
-        /* Estilos para el navbar */
+        /* Styles for the navbar and product cards */
         nav {
             background-color: #333;
             color: #fff;
@@ -29,6 +30,54 @@
             color: #fff;
             text-decoration: none;
         }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .product-card {
+            flex: 0 0 calc(33.33% - 20px);
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .product-image {
+            margin-bottom: 10px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product-details h3 {
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+
+        .product-details p {
+            margin: 5px 0;
+        }
+
+        .product-details .button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .product-details .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -37,12 +86,22 @@
         <ul>
             {{#if role0}}
             <li><a href="/">Home</a></li>
-            <li><a href="/orders">Orders</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/profile">Profile</a></li>
             <li><button id="signout" type="submit">Sign out</button></li>
             {{/if}}
             {{#if role1}}
             <li><a href="/">Home</a></li>
             <li><a href="/products/form">Form</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if role2}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/products/me">My products</a></li>
+            <li><a href="/cart">cart</a></li>
+            <li><a href="/profile">Profile</a></li>
             <li><button id="signout">Sign out</button></li>
             {{/if}}
             {{#if roleUnd}}
@@ -60,21 +119,25 @@
         <label for="filters">Escribe tus filtros:</label>
         <input type="text" id="filter" name="filters" placeholder="Escribe aquí...">
 
-        <label for="filters">Escribe tu sort:</label>
+        <label for="sort">Escribe tu sort:</label>
         <input type="text" id="sort" name="sorters" placeholder="Escribe aquí...">
 
         <button id="buscar" type="submit">Buscar</button>
     </form>
 
-
     {{#if products.length}}
-    <ul>
+    <ul class="product-list">
         {{#each products}}
-        <li>
-            <h3>{{ this.name }}</h3>
-            <img src="{{ this.photo }}" alt="{{ this.name }} Image">
-            <p>Price: ${{ this.price }}</p>
-            <p>Stock: {{ this.stock }}</p>
+        <li class="product-card">
+            <div class="product-image">
+                <img src="{{ this.Img }}" alt="{{ this.name }} Image">
+            </div>
+            <div class="product-details">
+                <h3>{{ this.name }}</h3>
+                <p>Price: ${{ this.price }}</p>
+                <p>Stock: {{ this.stock }}</p>
+                <a href="/details/{{ this._id }}" class="button">View more</a>
+            </div>
         </li>
         {{/each}}
     </ul>
@@ -82,17 +145,175 @@
     <p>No products available.</p>
     {{/if}}
 
+    <!-- Socket.io script if needed -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
-    <script>
-        const socket = io();
-
-        // Additional Socket.IO logic for the home page can be added here if needed
-    </script>
+    <!-- Additional client-side scripts -->
     <script src="/scripts/sortAndFilter.js"></script>
     <script src="/scripts/signout.js"></script>
+</body>
 
+</html> --}}
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}</title>
+    <style>
+        /* Styles for the navbar and product cards */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
 
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .product-card {
+            flex: 0 0 calc(33.33% - 20px);
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .product-image {
+            margin-bottom: 10px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product-details h3 {
+            font-size: 1.2em;
+            margin-top: 0;
+        }
+
+        .product-details p {
+            margin: 5px 0;
+        }
+
+        .product-details .button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .product-details .button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: default;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            {{#if role0}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout" type="submit">Sign out</button></li>
+            {{/if}}
+            {{#if role1}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if role2}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/products/form">Form</a></li>
+            <li><a href="/products/me">My products</a></li>
+            <li><a href="/cart">cart</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><button id="signout">Sign out</button></li>
+            {{/if}}
+            {{#if roleUnd}}
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/login">Login</a></li>
+            <li><a href="/auth/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+
+    <h1>{{ name }}</h1>
+
+    <h2>Filter by Name</h2>
+    <input id="nameInput" type="text">
+    <button id="name" type="submit">Name filter</button>
+
+    <h2>Sorters</h2>
+    <div>
+        <button id="cheapest" type="submit">From cheapest to most expensive</button>
+        <button id="expensive" type="submit">From most expensive to cheapest</button>
+        <button id="mostStock" type="submit">From most stock to less stock</button>
+        <button id="lessStock" type="submit">From less stock to most stock</button>
+        <button id="aToZ" type="submit">From A to Z</button>
+        <button id="zToA" type="submit">From Z to A</button>
+        <button id="clear" type="submit"><a href="/">Clear filters</a></button>
+    </div>
+
+    {{#if products.length}}
+    <ul class="product-list">
+        {{#each products}}
+        <li class="product-card">
+            <div class="product-image">
+                <img src="{{ this.Img }}" alt="{{ this.name }} Image">
+            </div>
+            <div class="product-details">
+                <h3>{{ this.name }}</h3>
+                <p>Price: ${{ this.price }}</p>
+                <p>Stock: {{ this.stock }}</p>
+                <a href="/details/{{ this._id }}" class="button">View more</a>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>No products available.</p>
+    {{/if}}
+
+    <!-- Socket.io script if needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <!-- Additional client-side scripts -->
+    <script src="/scripts/sortAndFilter.js"></script>
+    <script src="/scripts/signout.js"></script>
 </body>
 
 </html>

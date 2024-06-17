@@ -1,24 +1,39 @@
 // import express from 'express';
+// import { verifytoken } from '../../utils/token.js';
+
 // const router = express.Router();
-// router.get('/', (req, res) => {
-//     res.render('registration', { title: 'Registration Form' });
+
+// router.get('/', async (req, res, next) => {
+//     try {
+//         res.render('registration', {
+//             title: 'Registration Form',
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
 // });
 
 // export default router;
 
-import express from 'express';
-import { verifytoken } from '../../utils/token.js';
 
-const router = express.Router();
+import CustomRouter from '../CustomRouter.js';
+import isAuthMid from '../../middlewares/isAuth.mid.js';
 
-router.get('/', async (req, res, next) => {
-    try {
-        res.render('registration', {
-            title: 'Registration Form',
-        });
-    } catch (error) {
-        next(error);
+class ViewsRegistrationRouter extends CustomRouter {
+    async renderRegistrationForm(req, res, next) {
+        try {
+            res.render('registration', {
+                title: 'Registration Form',
+            });
+        } catch (error) {
+            next(error);
+        }
     }
-});
 
-export default router;
+    init() {
+        this.read('/', ["PUBLIC"], isAuthMid, this.renderRegistrationForm.bind(this));
+    }
+}
+
+const viewsRegistrationRouter = new ViewsRegistrationRouter();
+export default viewsRegistrationRouter.getRouter();

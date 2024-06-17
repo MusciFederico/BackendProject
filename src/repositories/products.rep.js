@@ -12,7 +12,7 @@ class ProductsRep {
         const response = await this.model.create(data);
         return response
     }
-    read = async ({ filterObj, sortObj }) => await this.model.read({ filter: filterObj, sort: sortObj });
+    read = async ({ filterObj, sortObj }) => await this.model.read({ filterObj, sortObj });
     readOne = async (id) => await this.model.readOne(id);
     update = async (id, data) => await this.model.update(id, data);
     destroy = async (id) => await this.model.destroy(id);

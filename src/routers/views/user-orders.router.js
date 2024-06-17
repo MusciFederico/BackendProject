@@ -57,6 +57,7 @@ router.get('/', async (req, res, next) => {
 
     const role0 = 'role0';
     const role1 = 'role1';
+    const role2 = 'role2';
     const roleUnd = 'roleUnd';
 
     try {
@@ -71,9 +72,12 @@ router.get('/', async (req, res, next) => {
             role = role0;
         } else if (role === 1) {
             role = role1;
+        } else if (role === 2) {
+            role = role2;
         } else {
             role = roleUnd;
         }
+
         const email = req.session.email
         const user = await usersManager.readByEmail(email)
         const _id = user._id
