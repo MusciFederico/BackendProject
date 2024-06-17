@@ -12,4 +12,4 @@ const createHash = (password) => bcrypt.hashSync(password, 10);
 
 const verifyHash = (password, hashedPassword) => bcrypt.compareSync(password, hashedPassword);
 
-export { createHash, verifyHash };
+export { createHash, verifyHash }; /// normal bcrypt crashes docker
