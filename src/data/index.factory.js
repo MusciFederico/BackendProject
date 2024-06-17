@@ -49,6 +49,7 @@
 
 import args from "../utils/args.js";
 import logger from "../utils/logger/logger.factory.js";
+import env from "../utils/env.js";
 
 let dao = {}
 
@@ -82,6 +83,7 @@ switch (environment) {
     case "test":
     default:
         logger.INFO("MONGO CONNECTED");
+        logger.INFO("environment", env);
         const { default: productsMongo } = await import("./mongo/products.mongo.js");
         const { default: usersMongo } = await import("./mongo/users.mongo.js");
         const { default: ordersMongo } = await import("./mongo/orders.mongo.js");
